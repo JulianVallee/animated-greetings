@@ -1,0 +1,43 @@
+@import 'default.scss';
+
+// Overwrite slider default theme variables
+$themeColor: $colorAccent;
+$dotShadow: none;
+$dotShadowFocus: none;
+$dotBgColor: $colorAccent;
+$dotBgColorDisable: $colorAccent;
+$dotBorderRadius: $borderRadius;
+
+// Import slider default theme
+@import '~vue-slider-component/lib/theme/default.scss';
+
+// Custom slider styles
+.vue-slider {
+
+  &-process {
+    transition: transform $transitionDuration;
+  }
+
+  &:hover {
+    .vue-slider-process {
+      transform: scaleY(1.5);
+    }
+  }
+
+  &-dot-handle {
+    width: 10px;
+  }
+
+  &-mark {
+    color: #fff;
+    text-shadow: 0 0 2px #000;
+    transform: translate(calc(-50% + 2px), -50%) !important;
+
+    &:first-child,
+    &:last-child {
+      .vue-slider-mark-step {
+        display: inline;
+      }
+    }
+  }
+}

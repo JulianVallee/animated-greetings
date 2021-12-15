@@ -1,0 +1,11 @@
+/dist
+/node_modules
+
+/themes
+
+.DS_Store
+*.log
+.idea
+.vscode
+.cache
+.eslintcache

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: localdev
+      WORDPRESS_DB_PASSWORD: localdev
+      WORDPRESS_DB_NAME: localdev
+    volumes:
+      - wordpress:/var/www/html
+      - ./dist:/var/www/html/wp-content/plugins/animated-greetings
+      - ./themes/x:/var/www/html/wp-content/themes/x
+      - ./themes/blank:/var/www/html/wp-content/themes/blank
+
+  db:
+    image: mysql:5.7
+    restart: always
+    container_name: db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: localdev
+      MYSQL_USER: localdev
+      MYSQL_PASSWORD: localdev
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:

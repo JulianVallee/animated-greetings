@@ -1,0 +1,57 @@
+{
+  "name": "animated-greetings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:development": "webpack --mode development",
+    "build:production": "webpack --mode production",
+    "devserver:up": "docker compose up -d",
+    "devserver:down": "docker compose down",
+    "postinstall": "curl -s -L https://wordpress.org/latest.tar.gz | tar -xz -C node_modules"
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^2.0.6",
+    "animejs": "^3.2.1",
+    "core-js": "^3.19.2",
+    "rfdc": "^1.3.0",
+    "vue": "^2.6.14",
+    "vue-color": "^2.8.1",
+    "vue-i18n": "^8.26.7",
+    "vue-slider-component": "^3.2.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "autoprefixer": "^10.4.0",
+    "babel-loader": "^8.2.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.0.0",
+    "css-loader": "^6.5.1",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss": "^8.4.4",
+    "postcss-loader": "^6.2.1",
+    "sass": "^1.44.0",
+    "sass-loader": "^12.3.0",
+    "style-loader": "^3.3.1",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.64.4",
+    "webpack-build-notifier": "^2.3.0",
+    "webpack-cli": "^4.9.1",
+    "zip-webpack-plugin": "^4.0.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

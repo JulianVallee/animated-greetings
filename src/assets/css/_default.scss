@@ -1,0 +1,54 @@
+// Main colors
+$colorPrimary: #ff6600;
+$colorAccent: #28303D;
+
+$colorGreen: #4fff47;
+$colorRed: #ff4747;
+
+
+// 1. Global
+$transitionDuration: 0.1s;
+$transitionDurationLong: 0.5s;
+$transitionEasing: cubic-bezier(0.22, 1, 0.36, 1);
+$gridGap: 2em;
+
+// 2. Media Queries
+$small: 300px;
+$medium: 900px;
+
+// 3. Borders
+$borderSize: 1px;
+$borderRadius: 0px;
+$borderColor: #ddd;
+
+// 4. Components
+// Panels
+//$panelPadding: 2rem 1.5rem;
+//$panelBackground: #f0f0f0;
+$panelPadding: 0;
+$panelBackground: transparent;
+
+// Inputs
+$inputPadding: 0.5rem 1rem;
+$inputPlaceholderColor: #ccc;
+
+// Buttons
+$buttonBackground: #fff;
+$buttonTextColor: $colorAccent;
+$buttonBorderColor: $colorAccent;
+$buttonBorderSize: 2px;
+
+// Editor
+
+// Player
+$playerIconColor: rgba(255, 255, 255, 0.85);
+$playerSliderRailColor: rgba(255, 255, 255, 0.35);
+$playerSliderProgressColor: #f00;
+
+:export {
+  transitionDuration: $transitionDuration;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
