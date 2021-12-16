@@ -306,8 +306,13 @@ export default {
     </transition-panel-container>
 
     <div class="align-center" style="padding: 0 1.5rem;" v-if="options.showOpenGeneratorPanel && !options.editorShow && !this.options.playerFullscreen">
+<!--        <span>-->
+<!--          {{ $t('openGeneratorText') }}-->
+<!--        </span>-->
         <span>
-          {{ $t('openGeneratorText') }}
+          Sie möchten auch Ihre Familie oder Freunde auf diese Weise grüßen? Nutzen Sie unseren kostenlosen Generator,
+          geben Sie Ihren Text ein und verschicken anschließend einfach nur einen Link zu Ihren persönlichen Grüßen.
+          Kein Registrieren, keine Passwörter. Einfach so, weil es Spaß macht!
         </span>
       <a :class="['editor__button', ...options.buttonClasses]" :href="generatorUrl" target="_blank">Zum Generator</a>
     </div>
