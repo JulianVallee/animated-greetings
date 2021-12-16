@@ -15,9 +15,9 @@ import LoggerMixin from "./../../assets/js/mixins/logger.js";
  * Setup FontAwesome core, icons and Vue component
  */
 import { library as faLibrary } from '@fortawesome/fontawesome-svg-core';
-import { faWhatsapp, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faPlus, faEdit, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt, faCopy } from '@fortawesome/free-regular-svg-icons';
+import { faWhatsapp, faFacebook, faTwitter, faLinkedin, faXingSquare } from '@fortawesome/free-brands-svg-icons';
+import { faPlus, faEdit, faPlay, faPause, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faCopy, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 faLibrary.add(faPlus);
@@ -26,7 +26,12 @@ faLibrary.add(faTrashAlt);
 faLibrary.add(faCopy);
 faLibrary.add(faPlay);
 faLibrary.add(faPause);
+faLibrary.add(faExpand);
+faLibrary.add(faCompress);
+faLibrary.add(faEnvelope);
 faLibrary.add(faWhatsapp);
+faLibrary.add(faLinkedin);
+faLibrary.add(faXingSquare);
 faLibrary.add(faFacebook);
 faLibrary.add(faTwitter);
 

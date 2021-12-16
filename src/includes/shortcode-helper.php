@@ -4,6 +4,7 @@ class Shortcode_Helper
 {
     private const DELIMITER = '_';
 
+
     /**
      * @since 1.0.0
      */
@@ -34,6 +35,26 @@ class Shortcode_Helper
     private static function normalize_key_casing($value, $separators = ['_', '-'])
     {
         return str_replace($separators, '', lcfirst(ucwords($value, implode('', $separators))));
+    }
+
+    /**
+     * @param $data
+     * @return string
+     * @since 1.0.1
+     */
+    public static function get_javascript_vars_tag($data)
+    {
+        $output = '';
+
+        if(is_array($data) || is_object($data)) {
+            foreach($data AS $key => $value) {
+                if((is_array($value) && count($value)) || (is_object($value) && count((array)$value))) {
+                    $output .= "\tvar " . $key . ' = ' . json_encode($value) . ";\n";
+                }
+            }
+        }
+
+        return $output ? "<script>\n${output}</script>" : '';
     }
 
     /**

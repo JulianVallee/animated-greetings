@@ -40,7 +40,7 @@ export default {
         return this.input.value.split('');
 
       } else {
-        return this.input.value;
+        return [this.input.value];
 
       }
     },

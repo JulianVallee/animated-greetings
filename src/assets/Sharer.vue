@@ -28,10 +28,12 @@ export default {
   i18n: {
     messages: {
       de: {
-        generateLink: 'Link generieren'
+        generateLink: 'Link generieren',
+        sharerText: 'Oder teile deinen Link in verschiedenen Messengern und Sozialen Netzwerken.'
       },
       en: {
-        generateLink: 'Generate link'
+        generateLink: 'Generate link',
+        sharerText: ''
       }
     }
   },
@@ -40,7 +42,7 @@ export default {
       this.log(`Copying link to clipboard`);
       navigator.clipboard.writeText(this.url);
     },
-  }
+  },
 };
 </script>
 
@@ -53,12 +55,34 @@ export default {
     <template v-else>
       <input-clipboard placeholder="Share Link" :value="url" v-on:click="copyLink"/>
 
+      <p>
+        Direkt teilen:
+      </p>
+
       <div class="sharer__social-button-container">
+        <sharer-social-button
+            :sharer="'email'"
+            :subject="title"
+            :title="title"
+            :url="url">
+          <font-awesome-icon :icon="['far', 'envelope']" size="2x"/>
+        </sharer-social-button>
         <sharer-social-button
             :sharer="'whatsapp'"
             :title="title"
-            :url="url">
+            :url="url"
+            :web="true">
           <font-awesome-icon :icon="['fab', 'whatsapp']" size="2x" style="color: #25D366;"/>
+        </sharer-social-button>
+        <sharer-social-button
+            :sharer="'linkedin'"
+            :url="url">
+          <font-awesome-icon :icon="['fab', 'linkedin']" size="2x" style="color: #0e76a8;"/>
+        </sharer-social-button>
+        <sharer-social-button
+            :sharer="'xing'"
+            :url="url">
+          <font-awesome-icon :icon="['fab', 'xing-square']" size="2x" style="color: #026466;"/>
         </sharer-social-button>
         <sharer-social-button
             :sharer="'facebook'"
@@ -83,9 +107,9 @@ export default {
 @import 'css/default.scss';
 
 .sharer {
-  display: flex;
-  flex-direction: column;
-  grid-gap: $gridGap;
+  //display: flex;
+  //flex-direction: column;
+  //grid-gap: $gridGap;
 
   &__social-button-container {
     display: flex;

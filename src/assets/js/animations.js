@@ -11,7 +11,7 @@ export const Animations = {
             {
                 targets: (i) => `.animation__canvas-text--${i} .inner`,
                 opacity: [0, 1],
-                delay: 0,
+                delay: 160,
                 duration: 5,
                 easing: "linear"
             },

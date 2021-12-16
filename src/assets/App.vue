@@ -113,6 +113,18 @@ export default {
         showOpenGeneratorPanel: true,
         logging: true,                                    // {Boolean} Enable logging
 
+        // New options for default animation timings, not connected yet
+        durationBefore: 0,                                // {Number} Wait before starting the animation
+        durationAfter: 0,                                 // {Number} Wait after ending the animation
+        delayEnter: 0,                                    // {Number} Wait before fading in each animation layer
+        durationEnter: 0,                                 // {Number} Duration for fading in each animation layer
+        delayLeave: 0,                                    // {Number} Wait before fading out each animation layer
+        durationLeave: 0,                                 // {Number} Duration for fading out each animation layer
+
+        advancedHeader: true,                             // {Boolean} Experimental: Enable headers with separate step
+        timeline: true,                                   // {Boolean} Enable timeline
+        timelineDecorations: false,                       // {Boolean} Enable timeline marks and tooltip
+
         defaultValue: 'Textzeile {i}',                    // {String} Layer default value; Replacements: {i} = current
         defaultLayers: 3,                                 // {Number} Number of example layers to be added on empty data
         maxLayers: false,                                 // {Boolean|Number} Disable with false, or limit with a number
@@ -123,9 +135,10 @@ export default {
 
         buttonClasses: '',                                // {String} Additional CSS classes for site specific styling
 
-        editorShow: true,                                 // {Boolean} STATE
-        playerShow: true,                                 // {Boolean} STATE
-        controlsEnable: true,                             // {Boolean} STATE
+        editorShow: true,                                 // {Boolean} STATE Set to current editor opened state.
+        playerShow: true,                                 // {Boolean} STATE Set to current player opened state.
+        controlsEnable: true,                             // {Boolean} STATE Always same as editorShow, can be removed
+        playerFullscreen: false,                          // {Boolean} STATE Set to current "fullscreen" state.
 
       },
 
@@ -173,6 +186,11 @@ export default {
       // Enable player controls if the editor is visible
       // this.options.player.controlsEnable = newValue;
       this.options.controlsEnable = newValue;
+    }
+  },
+  computed: {
+    generatorUrl() {
+      return new URL(this.options.editorUrl, this.options.baseUrl);
     }
   },
   methods: {
@@ -250,10 +268,6 @@ export default {
         }
       }
 
-    },
-
-    gotoGeneratorSite() {
-      window.location = new URL(this.options.editorUrl , this.options.baseUrl);
     }
   }
 };
@@ -272,7 +286,7 @@ export default {
       </div>
     </panel>
 
-    <transition-panel-container :has-gap="this.options.editorShow && this.options.playerShow">
+    <transition-panel-container :has-gap="options.editorShow && options.playerShow && !options.playerFullscreen">
       <transition-panel v-if="options.editor" :show="options.editorShow" :colored="true">
         <editor
             ref="editor"
@@ -281,7 +295,7 @@ export default {
             v-on:update="updatePlayer"/>
       </transition-panel>
 
-      <transition-panel v-if="options.player" :show="options.playerShow" :colored="this.options.editorShow" v-on:after-enter="updatePlayer">
+      <transition-panel v-if="options.player" :show="options.playerShow" :colored="options.editorShow" v-on:after-enter="updatePlayer">
         <player
             ref="player"
             :inputs="inputs"
@@ -291,11 +305,11 @@ export default {
 
     </transition-panel-container>
 
-    <div class="align-center" style="padding: 0 1.5rem;" v-if="options.showOpenGeneratorPanel && !options.editorShow">
+    <div class="align-center" style="padding: 0 1.5rem;" v-if="options.showOpenGeneratorPanel && !options.editorShow && !this.options.playerFullscreen">
         <span>
           {{ $t('openGeneratorText') }}
         </span>
-      <button :class="['editor__button', ...options.buttonClasses]" v-on:click="gotoGeneratorSite">Zum Generator</button>
+      <a :class="['editor__button', ...options.buttonClasses]" :href="generatorUrl" target="_blank">Zum Generator</a>
     </div>
 
   </div>
@@ -304,6 +318,22 @@ export default {
 <style lang="scss">
 @import 'css/default.scss';
 @import 'css/vue-slider.scss';
+
+
+.advanced-header {
+  display: block;
+  margin-bottom: 1rem;
+
+  &__secondary {
+    color: #333;
+    font-weight: 700;
+  }
+
+  &__primary {
+    margin: 0;
+    line-height: 1em;
+  }
+}
 
 .animated-greetings {
   display: flex;

@@ -15,12 +15,12 @@
  * @wordpress-plugin
  * Plugin Name:       Animated Greetings
  * Plugin URI:        https://vallee.io/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Description:       Animated greetings.
+ * Version:           1.0.1
  * Author:            Julian Vallée
  * Author URI:        https://vallee.io/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License:
+ * License URI:
  * Text Domain:       animated-greetings
  * Domain Path:       /languages
  */
@@ -39,7 +39,7 @@ error_reporting(E_ALL);
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('ANIMATED_GREETINGS_VERSION', '1.0.0');
+define('ANIMATED_GREETINGS_VERSION', '1.0.1');
 
 /**
  * The code that runs during plugin activation.

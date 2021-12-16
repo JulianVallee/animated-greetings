@@ -32,7 +32,6 @@ export default {
   @import 'css/default.scss';
 
   .panel {
-    overflow: hidden;
     width: 100%;
     border-radius: $borderRadius;
 

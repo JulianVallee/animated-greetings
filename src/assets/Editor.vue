@@ -72,6 +72,7 @@ export default {
       if(!this.hasMaxInputs) {
         this.inputs.push(this.getNewInput(this.inputs.length))
       }
+      this.uid = null;
     },
 
     updateInput(index, value) {
@@ -115,6 +116,7 @@ export default {
       } else {
         this.deleteInput(index);
       }
+      this.uid = null;
     },
 
     setActiveInput(index) {
@@ -167,10 +169,14 @@ export default {
   i18n: { // `i18n` option, setup locale info for component
     messages: {
       de: {
-        headerLayers: 'Schritt 1: Schreibe deine Grüße',
-        textLayers: 'Gib Zeile für Zeile deine Grüße ein.',
-        headerLink: 'Schritt 2: Teile deinen Link',
-        textLink: 'Klicke auf "Link generieren" und versende anschließend deinen persönlichen Link an Freunde, Familie oder deine Lieblings-Kollegen!',
+        // headerLayers: 'Schritt 1: Schreibe deine Grüße',
+        step: 'Schritt',
+        headerLayers: 'Grüße schreiben',
+        textLayers: 'Geben Sie hier Zeile für Zeile Ihre Grüße ein.',
+        headerLink: 'Link teilen',
+        textLink: '„Zerlegen“ Sie Ihren Grußtext in Wortgruppen. Am besten lässt sich das Ergebnis lesen, wenn es im Durchschnitt zwei bis maximal vier Wörter pro Textzeile sind und die Wortgruppen in sich eine inhaltlich sinnvolle Einheit bilden. <a href="/generator-tipps">Hier</a> finden Sie paar weitere Tipps dazu.',
+        // textLink: 'Klicken Sie auf "Link generieren" und teilen Sie ihn anschließend mit Freunden, der Familie oder Ihren Lieblings-Kollegen!',
+        textLinkAfter: 'Sie können den Link jetzt kopieren oder ihn direkt über die verschiedenen Sozialen Netzwerke teilen.',
         maximumReached: 'Maximum erreicht',
         inputPlaceholder: 'Schreibe etwas'
       },
@@ -191,8 +197,19 @@ export default {
 <template>
     <div class="editor">
       <section>
-        <h3>{{ $t("headerLayers") }}</h3>
-        <p>{{ $t('textLayers') }}</p>
+        <div class="advanced-header" v-if="options.advancedHeader">
+          <span class="advanced-header__secondary">{{ $t("step") }} 1</span>
+          <h3 class="advanced-header__primary">{{ $t("headerLayers") }}</h3>
+        </div>
+        <h3 v-else>{{ $t("step") }} 1: {{ $t("headerLayers") }}</h3>
+
+        <p>
+          „Zerlegen“ Sie Ihren Grußtext in Wortgruppen.
+          Am besten lässt sich das Ergebnis lesen, wenn
+          es im Durchschnitt zwei bis maximal vier Wörter pro Textzeile
+          sind und die Wortgruppen in sich eine inhaltlich sinnvolle Einheit bilden.
+          <a href="/generator-tipps">Hier</a> finden Sie paar weitere Tipps dazu.
+        </p>
 
         <editor-input v-for="(input, key) in inputs"
                       v-on:input="updateInput"
@@ -214,8 +231,18 @@ export default {
       </section>
 
       <section>
-        <h3>{{ $t("headerLink") }}</h3>
-        <p>{{ $t("textLink") }}</p>
+        <div class="advanced-header" v-if="options.advancedHeader">
+          <span class="advanced-header__secondary">{{ $t("step") }} 2</span>
+          <h3 class="advanced-header__primary">{{ $t("headerLink") }}</h3>
+        </div>
+        <h3 v-else>{{ $t("step") }} 2: {{ $t("headerLink") }}</h3>
+
+<!--        <p>{{ $t(this.uid ? 'textLinkAfter' : 'textLink') }}</p>-->
+        <p>
+          Klicken Sie auf "Link generieren" und teilen Sie
+          diesen individuellen Link anschließend mit Freunden,
+          der Familie oder Ihren Lieblings-Kolleg*innen!
+        </p>
 
         <sharer :url="getPlayerLink"
                 :title="options.sharerTitle"
@@ -235,5 +262,4 @@ export default {
   flex-direction: column;
   grid-gap: $gridGap;
 }
-
 </style>

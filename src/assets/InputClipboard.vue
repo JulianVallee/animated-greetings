@@ -23,8 +23,8 @@ export default {
   computed: {
     tooltipClasses() {
       return {
-        'tooltip': true,
-        'tooltip--visible': this.isTooltipVisible
+        'input-clipboard__tooltip': true,
+        'input-clipboard__tooltip--visible': this.isTooltipVisible
       }
     }
   },
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <template>
-  <div class="input-clipboard__wrapper">
+  <div class="input-clipboard">
     <input type="text"
            class="input-clipboard__input"
            readonly="readonly"
@@ -73,74 +73,37 @@ export default {
 <style lang="scss">
 @import 'css/default.scss';
 
-$tooltipBackground: #fff;
+$tooltipBackground: #ddd;
 $tooltipColor: #333;
 
-.tooltip {
-  position: absolute;
-  left: 50%;
-  top: -8px;
-  transform: translate(-50%, -100%);
-  background: $tooltipBackground;
-  padding: 5px;
-  border-radius: 5px;
-  color: $tooltipColor;
-  font-weight: 300;
-  font-size: 1rem;
-  line-height: 1em;
-  opacity: 0;
-  transition: opacity $transitionDuration;
 
-  &--visible {
-    opacity: 1;
-  }
-
-  &:before{
-    content:'';
-    display:block;
-    width:0;
-    height:0;
-    position:absolute;
-
-    border-top: 8px solid $tooltipBackground;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
 .input-clipboard {
+  display: flex;
+  width: 100%;
   margin-bottom: 1em;
 
-  &__wrapper {
-    display: flex;
+  > input[type="text"] {
+    display: block;
     width: 100%;
+    height: auto;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0.5rem 1rem;
 
-    > input[type="text"] {
-      display: block;
-      width: 100%;
-      height: auto;
-      flex-grow: 1;
-      margin: 0;
-      padding: 0.5rem 1rem;
+    border: solid $borderSize $borderColor;
+    border-right: none;
+    border-radius: $borderRadius 0 0 $borderRadius;
 
-      border: solid $borderSize $borderColor;
-      border-right: none;
-      border-radius: $borderRadius 0 0 $borderRadius;
+    outline: none !important;
 
-      outline: none !important;
+    font-size: 1rem;
 
-      font-size: 1rem;
+    &::placeholder {
+      color: $inputPlaceholderColor;
+    }
 
-      &::placeholder {
-        color: $inputPlaceholderColor;
-      }
-
-      &:focus, &:active {
-        box-shadow: inset 0 0 4px $inputPlaceholderColor;
-      }
+    &:focus, &:active {
+      box-shadow: inset 0 0 4px $inputPlaceholderColor;
     }
   }
 
@@ -178,6 +141,42 @@ $tooltipColor: #333;
 
     &:last-of-type {
       border-radius: 0 $borderRadius $borderRadius 0;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    transform: translate(-50%, -100%);
+    background: $tooltipBackground;
+    padding: 5px;
+    border-radius: 5px;
+    color: $tooltipColor;
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1em;
+    opacity: 0;
+    transition: opacity $transitionDuration;
+
+    &--visible {
+      opacity: 1;
+    }
+
+    &:before{
+      content:'';
+      display:block;
+      width:0;
+      height:0;
+      position:absolute;
+
+      border-top: 8px solid $tooltipBackground;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

@@ -38,3 +38,9 @@ export default {
     <slot></slot>
   </a>
 </template>
+
+<style type="text/scss">
+.sharer-button {
+  cursor: pointer;
+}
+</style>

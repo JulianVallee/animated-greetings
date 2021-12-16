@@ -12,15 +12,15 @@ class EditorShortcode
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/shortcode-helper.php';
 
         // Shortcode attributes
-        $attsNormalized = Shortcode_Helper::normalize_atts([
+        $options = Shortcode_Helper::normalize_atts([
             'baseUrl' => get_site_url()
         ], $atts);
 
-        $uid = self::get_uid($attsNormalized);
+        $data = self::get_uid_data(self::get_uid($options));
 
         return self::render([
-            'animatedGreetingsOptions' => $attsNormalized,
-            'animatedGreetingsData' => self::get_uid_data($uid)
+            'animatedGreetingsOptions' => $options,
+            'animatedGreetingsData' => $data
         ]);
     }
 
@@ -28,15 +28,7 @@ class EditorShortcode
     {
         ob_start(); ?>
 
-        <script>
-        <?php foreach($jsData AS $key => $value) {
-            if(!$value) {
-                continue;
-            }
-            ?>
-            var <?= $key ?> = <?= json_encode($value) ?>;
-        <?php } ?>
-        </script>
+        <?= Shortcode_Helper::get_javascript_vars_tag($jsData) ?>
 
         <div id="animated-greetings-container" class="alignwide"></div>
 
@@ -45,15 +37,20 @@ class EditorShortcode
 
     private static function get_uid($attsNormalized)
     {
-        if(array_key_exists('greetings', $_GET)) {
-            return sanitize_text_field($_GET['greetings']);
+        $uid = null;
 
-        } else if(array_key_exists('preload', $attsNormalized)) {
-            return sanitize_text_field($attsNormalized['preload']);
+        if(isset($_GET['greetings'])) {
+            $uid = sanitize_text_field($_GET['greetings']);
+
+        } else if(isset($attsNormalized['preload'])) {
+            $uid = sanitize_text_field($attsNormalized['preload']);
 
         }
 
-        return null;
+        return is_string($uid) && strlen($uid) == Animated_Greetings::UID_LENGTH
+            ? $uid
+            : null;
+
     }
 
     private static function get_uid_data($uid)

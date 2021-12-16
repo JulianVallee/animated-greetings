@@ -63,7 +63,10 @@ export default {
       // 1 for every 100px width of the animation element
       playerResponsiveFactor: 1,
 
-      resizeObserver: null
+      resizeObserver: null,
+
+      timeoutId: null,
+      timeoutLateId: null,
     }
   },
   i18n: {
@@ -119,8 +122,17 @@ export default {
         'paused': this.isPaused
       }
     },
+    classesOverlay() {
+      return {
+        'animation__overlay': true,
+        'animation__overlay--active': this.options.controlsEnable
+      };
+    },
     footerButtonIcon() {
       return this.isPaused ? 'play' : 'pause';
+    },
+    buttonFullscreenIcon() {
+      return ['fas', this.options.playerFullscreen ? 'compress' : 'expand'];
     },
     isPaused() {
       if(!this.loaded) {
@@ -157,6 +169,55 @@ export default {
         this.pause();
       }
     },
+    toggleFullscreen() {
+      this.log("Toggling fullscreen");
+
+      if(this.options.editor) {
+        this.options.editorShow = !this.options.editorShow;
+        this.options.playerFullscreen = !this.options.playerFullscreen;
+      }
+    },
+
+    onClickOverlay() {
+        const dblClickThreshold = 150;
+        const dblClickThresholdLate = 500;
+        let toggled = false;
+
+        if(!this.timeoutId && !this.timeoutLateId) {
+
+          this.timeoutId = setTimeout(() => {
+            // Single click
+            this.timeoutId = null;
+
+            if(this.options.controlsEnable || this.options.playerFullscreen) {
+              this.togglePlay();
+              toggled = true;
+
+              this.timeoutLateId = setTimeout(() => {
+                this.timeoutLateId = null;
+              }, dblClickThresholdLate);
+            }
+
+
+          }, dblClickThreshold);
+
+        } else {
+          // Double click
+          clearTimeout(this.timeoutId);
+
+          if(this.timeoutLateId) {
+            this.togglePlay();
+          }
+
+          this.toggleFullscreen();
+
+          this.timeoutId = null;
+          this.timeoutLateId = null;
+
+        }
+
+
+    },
 
     createTimeline() {
       this.log("Creating new timeline");
@@ -179,7 +240,7 @@ export default {
             targets: '.animation__canvas',
             opacity: 1,
             duration: 0,
-            delay: 1500
+            delay: this.options.durationBefore > 0 ? this.options.durationBefore : 1000
           });
 
       // Build the animation timeline entries for each input
@@ -204,7 +265,8 @@ export default {
           .add({
             targets: '.animation__canvas',
             opacity: 1,
-            duration: 1,
+            duration: 0,
+            delay: this.options.durationAfter > 0 ? this.options.durationAfter : 1
           });
 
       this.updateTimelineMarks();
@@ -236,7 +298,10 @@ export default {
       // Check if we can apply animation duration
       if(targetCounter % 2 !== 0) {
         // Delay leave
-        if(typeof target.delay !== 'undefined') {
+        if(this.options.delayLeave > 0) {
+          target.delay = this.options.delayLeave;
+
+        } else if(typeof target.delay !== 'undefined') {
           if(typeof target.delay !== "function") {
             target.delay += this.inputs[inputIndex].delayLeave;
 
@@ -252,8 +317,12 @@ export default {
           target.delay = this.inputs[inputIndex].delayLeave;
         }
 
+
         // Duration leave
-        if(typeof target.duration !== 'undefined') {
+        if(this.options.durationLeave > 0) {
+          target.duration = this.options.durationLeave;
+
+        } else if(typeof target.duration !== 'undefined') {
           target.duration += this.inputs[inputIndex].durationLeave;
 
         } else {
@@ -263,7 +332,10 @@ export default {
 
       } else {
         // Delay enter
-        if(typeof target.delay !== 'undefined') {
+        if(this.options.delayEnter > 0) {
+          target.delay = this.options.delayEnter;
+
+        } else if(typeof target.delay !== 'undefined') {
           if(typeof target.delay !== "function") {
             target.delay += this.inputs[inputIndex].delayEnter;
 
@@ -281,7 +353,10 @@ export default {
         }
 
         // Duration enter
-        if(typeof target.duration !== 'undefined') {
+        if(this.options.durationEnter > 0) {
+          target.duration = this.options.durationEnter;
+
+        } else if(typeof target.duration !== 'undefined') {
           target.duration += this.inputs[inputIndex].durationEnter;
 
         } else {
@@ -446,7 +521,14 @@ export default {
 
 <template>
     <div class="player">
-      <h3 v-if="!standalone">{{ $t('headerPreview') }}</h3>
+      <template v-if="!standalone || options.playerFullscreen">
+        <div class="advanced-header" v-if="options.advancedHeader">
+          <span class="advanced-header__secondary">&nbsp;</span>
+          <h3 class="advanced-header__primary">{{ $t("headerPreview") }}</h3>
+        </div>
+        <h3 v-else>{{ $t("headerPreview") }}</h3>
+      </template>
+
       <div :class="classesAnimation">
         <div class="animation__canvas">
           <div class="animation__canvas-effect"></div>
@@ -458,28 +540,37 @@ export default {
                            :responsiveFactor="playerResponsiveFactor" />
         </div>
 
-        <div class="animation__watermark" v-if="options.watermark">
-          <img :src="options.watermark">
-        </div>
+        <div :class="classesOverlay" v-on:click="onClickOverlay"></div>
 
-        <div :class="{'animation__overlay': true, 'animation__overlay--active': options.controlsEnable}" v-on:click="options.controlsEnable ? togglePlay() : ''"></div>
 
-        <div class="animation__footer" v-if="options.controlsEnable">
-          <vue-slider class="animation__timeline-slider"
-                      :value="timelineProgress"
-                      :marks="timelineOptions.marks"
-                      :tooltip="timelineOptions.tooltip"
-                      :tooltip-formatter="timelineOptions.tooltipFormatter"
-                      :duration="0"
-                      :drag-on-click="true"
-                      v-on:drag-start="onTimelineSliderMouseDown"
-                      v-on:drag-end="onTimelineSliderMouseUp"
-                      v-on:change="onTimelineSliderInput" />
+        <div class="animation__footer" v-if="options.controlsEnable || options.playerFullscreen">
+          <div class="animation__footer__inner">
+            <vue-slider class="animation__timeline-slider"
+                        :value="timelineProgress"
+                        :marks="timelineOptions.marks"
+                        :tooltip="options.timelineDecorations ? timelineOptions.tooltip : 'none'"
+                        :tooltip-formatter="timelineOptions.tooltipFormatter"
+                        :hide-label="!options.timelineDecorations"
+                        :duration="0"
+                        :drag-on-click="true"
+                        v-on:drag-start="onTimelineSliderMouseDown"
+                        v-on:drag-end="onTimelineSliderMouseUp"
+                        v-on:change="onTimelineSliderInput"
+                        v-if="options.timeline"/>
 
-          <div class="animation__footer-button" v-on:click="togglePlay()">
-            <font-awesome-icon :icon="footerButtonIcon" />
+            <div class="animation__footer-button" v-on:click="togglePlay()">
+              <font-awesome-icon :icon="footerButtonIcon" />
+            </div>
+
+            <div class="animation__footer-button" v-on:click="toggleFullscreen()">
+              <font-awesome-icon :icon="buttonFullscreenIcon" />
+            </div>
           </div>
         </div>
+
+        <a :href="options.baseUrl" class="animation__watermark" v-if="options.watermark">
+          <img :src="options.watermark">
+        </a>
       </div>
     </div>
 </template>
@@ -525,12 +616,13 @@ export default {
 
   &__watermark {
     position: absolute;
-    bottom: 2%;
-    right: 2%;
+    bottom: 4%;
+    right: 4%;
     width: 15%;
 
     img {
       width: 100%;
+      user-select: none;
     }
   }
 
@@ -547,21 +639,28 @@ export default {
 
   &__footer {
     position: absolute;
-    height: 2.8rem;
+    display: flex;
+    height: 5.6rem;
     width: 100%;
     bottom: -50px;
     margin-top: -4px;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.3029412448573179) 100%);
+    box-shadow: inset 0 -64px 48px -48px rgba(0, 0, 0, 0.75);
     opacity: 0;
     transition: opacity $transitionDuration, bottom $transitionDuration;
 
+    &__inner {
+      height: 50%;
+      bottom: 0;
+      position: absolute;
+      width: 100%;
+      display: flex;
+    }
 
     &-button {
-      position: absolute;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 1em;
+      width: 1rem;
       height: 100%;
       top: 0;
       padding: 0 2rem;
@@ -570,6 +669,14 @@ export default {
       cursor: pointer;
       z-index: 2;
       transition: color $transitionDuration;
+
+      &:first-of-type {
+        left: 0;
+      }
+
+      &:last-of-type {
+        right: 0;
+      }
 
       &:hover {
         color: rgba(255, 255, 255, 1);
@@ -586,13 +693,13 @@ export default {
   }
 
   &__timeline-slider {
+    position: absolute !important;
+    width: 100% !important;
     top: 0;
     left: 0;
     cursor: pointer;
     z-index: 1;
-    position: relative !important;
-    width: 70% !important;
-    margin: -8px auto 0 auto;
+    margin: -11px auto 0 auto;
 
     .vue-slider-dot-handle {
       display: none;
