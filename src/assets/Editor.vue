@@ -174,7 +174,7 @@ export default {
         headerLayers: 'Grüße schreiben',
         textLayers: 'Geben Sie hier Zeile für Zeile Ihre Grüße ein.',
         headerLink: 'Link teilen',
-        textLink: '„Zerlegen“ Sie Ihren Grußtext in Wortgruppen. Am besten lässt sich das Ergebnis lesen, wenn es im Durchschnitt zwei bis maximal vier Wörter pro Textzeile sind und die Wortgruppen in sich eine inhaltlich sinnvolle Einheit bilden. <a href="/generator-tipps">Hier</a> finden Sie paar weitere Tipps dazu.',
+        textLink: '„Zerlegen“ Sie Ihren Grußtext in Wortgruppen. Am besten lässt sich das Ergebnis lesen, wenn es im Durchschnitt zwei bis maximal vier Wörter pro Textzeile sind und die Wortgruppen in sich eine inhaltlich sinnvolle Einheit bilden. <a href="/generator-tipps" target="_blank">Hier</a> finden Sie paar weitere Tipps dazu.',
         // textLink: 'Klicken Sie auf "Link generieren" und teilen Sie ihn anschließend mit Freunden, der Familie oder Ihren Lieblings-Kollegen!',
         textLinkAfter: 'Sie können den Link jetzt kopieren oder ihn direkt über die verschiedenen Sozialen Netzwerke teilen.',
         maximumReached: 'Maximum erreicht',

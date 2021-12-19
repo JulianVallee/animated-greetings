@@ -130,8 +130,8 @@ export default {
         maxLayers: false,                                 // {Boolean|Number} Disable with false, or limit with a number
         maxLength: false,                                 // {Boolean|Number} Disable with false, or limit with a number
 
-        sharerTitle: 'Weihnachtsgrüße mit Webcoached:',   // {String} Text used by the social sharing buttons
-        sharerHashtags: ['Christmas', 'Webcoached'],      // {String[]} Hashtags used by the social sharing buttons
+        sharerTitle: 'Weihnachtsgrüße mit Improved Reading:',   // {String} Text used by the social sharing buttons
+        sharerHashtags: ['Christmas2021', 'ImprovedReading'],      // {String[]} Hashtags used by the social sharing buttons
 
         buttonClasses: '',                                // {String} Additional CSS classes for site specific styling
 
