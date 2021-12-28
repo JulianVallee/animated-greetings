@@ -1,8 +1,21 @@
+interface MixinDataInterface {
+    $options: {
+        _componentTag: string
+    }
+    name: string,
+    options: {
+        logging: {
+            enabled: boolean,
+            name: string
+        }
+    }
+}
+
 export default {
     data() {
         return {
-            log() {
-                if(this?.options?.logging === true || this?.options?.logging?.enabled) {
+            log(this: MixinDataInterface) {
+                if(this?.options?.logging || this?.options?.logging?.enabled) {
                     let logName = this.$options._componentTag;
 
                     if(this?.options?.logging?.name) {

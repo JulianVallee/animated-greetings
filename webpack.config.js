@@ -6,6 +6,7 @@ const ZipPlugin = require('zip-webpack-plugin');
 const autoprefixer = require("autoprefixer");
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
     entry: {
@@ -20,14 +21,43 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
+                },
+                exclude: {
+                    or: [
+                        /test/,
+                        /node_modules/
+                    ]
+                },
+            },
+            {
+                test: /\.ts$/,
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        onlyCompileBundledFiles: true,
+                        appendTsSuffixTo: [/\.vue$/]
+                    }
+                },
+                exclude: {
+                    or: [
+                        /test/,
+                        /node_modules/
+                    ]
                 },
             },
             {
                 test: /\.vue$/,
-                loader: "vue-loader",
+                use: {
+                    loader: "vue-loader"
+                },
+                exclude: {
+                    or: [
+                        /test/,
+                        /node_modules/
+                    ]
+                },
             },
             {
                 test: /\.s?css$/,
@@ -108,6 +138,6 @@ module.exports = {
         alias: {
             vue$: "vue/dist/vue.runtime.esm.js",
         },
-        extensions: ["*", ".js", ".vue", ".json"],
+        extensions: ["*", ".js", ".ts", ".vue", ".json"],
     },
 };

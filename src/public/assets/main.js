@@ -9,7 +9,7 @@ import VueSlider from 'vue-slider-component'
  * Source
  */
 import App from "./../../assets/App.vue";
-import LoggerMixin from "./../../assets/js/mixins/logger.js";
+import LoggerMixin from "./../../assets/js/mixins/logger.ts";
 
 /**
  * Setup FontAwesome core, icons and Vue component
@@ -19,6 +19,10 @@ import { faWhatsapp, faFacebook, faTwitter, faLinkedin, faXingSquare } from '@fo
 import { faPlus, faEdit, faPlay, faPause, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt, faCopy, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+if (module.hot) {
+    module.hot.accept();
+}
 
 faLibrary.add(faPlus);
 faLibrary.add(faEdit);

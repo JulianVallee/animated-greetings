@@ -5,6 +5,11 @@ import EditorInputData from "./js/types/editor-input-data.js";
 const FONT_SIZE_MIN = 0.5;
 
 export default {
+  data() {
+    return {
+      animationData: null
+    }
+  },
   props: {
     input: {
       type: Object,
@@ -21,6 +26,14 @@ export default {
       default: false
     }
   },
+  watch: {
+    'input.animation': {
+      handler() {
+        this.animationData = GetAnimation(this.input.animation, 0);
+      },
+      immediate: true
+    }
+  },
   methods: {
     /**
      * @param input {EditorInputData}
@@ -34,15 +47,9 @@ export default {
   },
   computed: {
     output() {
-      const animation = GetAnimation(this.input.animation, 0);
-
-      if(animation.hasOwnProperty('splitToCharArray')) {
-        return this.input.value.split('');
-
-      } else {
-        return [this.input.value];
-
-      }
+      return this.animationData.splitToCharArray
+          ? [...this.input.value]
+          : [this.input.value];
     },
 
     classesRoot() {
@@ -62,7 +69,7 @@ export default {
     responsiveFontSize() {
       // Normalize font size, getting values between 0.02 - 1.98
       const fontSizeNormalized = this.input.fontSize / 100;
-      return ((FONT_SIZE_MIN + (fontSizeNormalized)) * this.responsiveFactor);
+      return (FONT_SIZE_MIN + fontSizeNormalized) * this.responsiveFactor;
     }
   }
 };
