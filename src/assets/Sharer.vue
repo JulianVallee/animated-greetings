@@ -22,6 +22,7 @@ export default {
   props: {
     url: String,
     title: String,
+    subject: String,
     hashtags: Array,
     options: Object
   },
@@ -62,7 +63,7 @@ export default {
       <div class="sharer__social-button-container">
         <sharer-social-button
             :sharer="'email'"
-            :subject="title"
+            :subject="subject"
             :title="title"
             :url="url">
           <font-awesome-icon :icon="['far', 'envelope']" size="2x"/>

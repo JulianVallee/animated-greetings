@@ -40,7 +40,7 @@ export default class Sharer {
                     },
                 },
                 email: {
-                    shareUrl: 'mailto:' + this.getValue('to') || '',
+                    shareUrl: 'mailto:' + (this.getValue('to') || ''),
                     params: {
                         subject: this.getValue('subject'),
                         body: this.getValue('title') + '\n' + this.getValue('url'),

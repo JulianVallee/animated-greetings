@@ -245,6 +245,7 @@ export default {
         </p>
 
         <sharer :url="getPlayerLink"
+                :subject="options.sharerSubject"
                 :title="options.sharerTitle"
                 :hashtags="options.sharerHashtags"
                 :options="options"

@@ -11,6 +11,7 @@ export default {
     width: Number,
     height: Number,
     title: String,
+    subject: String,
     url: String,
     hashtag: String,
     hashtags: Array,
@@ -29,6 +30,7 @@ export default {
           :data-width="width"
           :data-height="height"
           :data-title='title + "\n"'
+          :data-subject='subject'
           :data-url="url"
 
           :data-quote="title"
