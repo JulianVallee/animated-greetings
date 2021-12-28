@@ -22,7 +22,7 @@ export default {
                         logName = this?.options?.logging?.name;
                     }
 
-                    const logPrefix = `%c [${logName}]:`;
+                    const logPrefix = `%c[${logName}]:`;
                     const logPrefixStyles = `color: #bada55`;
                     console.log(...[logPrefix, logPrefixStyles, ...arguments]);
                 }

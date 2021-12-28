@@ -20,10 +20,6 @@ import { faPlus, faEdit, faPlay, faPause, faExpand, faCompress } from '@fortawes
 import { faTrashAlt, faCopy, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-if (module.hot) {
-    module.hot.accept();
-}
-
 faLibrary.add(faPlus);
 faLibrary.add(faEdit);
 faLibrary.add(faTrashAlt);

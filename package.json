@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:dev": "webpack --mode development",
+    "build:prod": "webpack --mode production",
+    "dev": "node scripts/start-dev.js",
+    "dev:build": "docker compose build",
+    "dev:logs": "docker compose logs",
     "test": "run-s test:*",
     "test:unit": "jest --passWithNoTests ./test/unit",
     "test:components": "jest --passWithNoTests ./test/components",
     "test:e2e": "jest --passWithNoTests ./test/e2e",
-    "build:development": "webpack --mode development",
-    "build:production": "webpack --mode production",
-    "devserver:up": "docker compose up -d",
-    "devserver:down": "docker compose down",
     "postinstall": "curl -s -L https://wordpress.org/latest.tar.gz | tar -xz -C node_modules"
   },
   "author": "",
@@ -44,6 +45,7 @@
     "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",
     "file-loader": "^6.2.0",
+    "http-proxy-middleware": "^2.0.1",
     "jest": "^27.4.5",
     "jsdom": "^19.0.0",
     "mini-css-extract-plugin": "^2.4.5",
@@ -62,6 +64,7 @@
     "webpack": "^5.64.4",
     "webpack-build-notifier": "^2.3.0",
     "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.1",
     "zip-webpack-plugin": "^4.0.1"
   },
   "browserslist": [
