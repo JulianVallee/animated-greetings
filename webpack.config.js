@@ -1,14 +1,13 @@
+const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const Autoprefixer = require("autoprefixer");
 const ZipPlugin = require('zip-webpack-plugin');
-const autoprefixer = require("autoprefixer");
-const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
-const path = require("path");
-const webpack = require("webpack");
 const { responseInterceptor } = require('http-proxy-middleware');
 
+const URI = 'localhost';
 const DOCKER_PORT = 8080;
 const PROXY_PORT = 8081;
 
@@ -21,7 +20,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: `http://localhost:${DOCKER_PORT}/wp-content/plugins/animated-greetings/`,
+        publicPath: `http://${URI}:${DOCKER_PORT}/wp-content/plugins/animated-greetings/`,
         filename: '[name]/bundle.js', // Hacky way to force webpack to have multiple output folders vs multiple files per one path
     },
     module: {
@@ -86,7 +85,7 @@ module.exports = {
                         options: {
                             postcssOptions: {
                                 plugins: [
-                                    autoprefixer()
+                                    Autoprefixer()
                                 ],
                             }
                         },
@@ -148,7 +147,7 @@ module.exports = {
         extensions: ["*", ".js", ".ts", ".vue", ".json"],
     },
     devServer: {
-        host: "localhost",
+        host: URI,
         port: PROXY_PORT,
         headers: {
             'Access-Control-Allow-Origin': '*',
@@ -182,7 +181,7 @@ module.exports = {
          **/
         proxy: {
             '/': {
-                target: `http://localhost:${DOCKER_PORT}`,
+                target: `http://${URI}:${DOCKER_PORT}`,
 
                 /**
                  * webpack docs https://webpack.js.org/configuration/dev-server#devserverproxy:
@@ -217,12 +216,12 @@ module.exports = {
                 selfHandleResponse: true,
 
                 /**
-                 * Intercept response and replace docker with proxy url
+                 * Intercept response and replace docker url with proxy url
                  **/
                 onProxyRes: responseInterceptor(async (buffer, proxyRes, req, res) => {
                     return Promise.resolve(buffer
                         .toString('utf8')
-                        .replace(new RegExp(`localhost:${DOCKER_PORT}`, 'g'), `localhost:${PROXY_PORT}`));
+                        .replace(new RegExp(`${URI}:${DOCKER_PORT}`, 'g'), `${URI}:${PROXY_PORT}`));
                 }),
             },
         },
