@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node scripts/start-dev.ts",
     "build": "webpack --mode production",
-    "release": "standard-version --skip.commit --skip.tag --skip.bump",
+    "release": "standard-version",
     "test": "run-s test:*",
     "test:unit": "jest --silent=false --passWithNoTests ./test/unit",
     "test:components": "jest --silent=false --passWithNoTests ./test/components",
