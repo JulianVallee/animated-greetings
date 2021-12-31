@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.3 (2021-12-31)
+
+
+### Build System
+
+* **changelog:** fix and configure changelog ([69f5653](https://github.com/mokkapps/changelog-generator-demo/commits/69f5653ccfdc22e5218ee1f6280b8d20ac82e762))
+* **git:** improve build and release process ([32112f4](https://github.com/mokkapps/changelog-generator-demo/commits/32112f4bee14c5feaaa3de95da551d0960f7779e))
+
 ### 1.0.2 (2021-12-31)
 
 
