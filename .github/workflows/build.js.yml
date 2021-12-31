@@ -32,19 +32,26 @@ jobs:
     - run: npm run test:components
     - run: npm run build --if-present
 
-    # This step reads a file from repo and use it for body of the release
-    # This works on any self-hosted runner OS
-    - name: Read package.json and use it as a body of new release
-      id: read_release
+      # This step reads a file from repo and use it for body of the release
+      # This works on any self-hosted runner OS
+    - name: Parse version from package.json
+      id: read_version
       shell: bash
       run: |
         VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
         echo "::set-output name=VERSION::$VERSION"
+
+    - name: Parse latest changelog from CHANGELOG.md
+      id: changelog
+      uses: ocavue/changelog-parser-action@v1
 
     - name: Upload build files to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./dist/animated-greetings.zip
-        tag: ${{ steps.read_release.outputs.VERSION }}
-        body: "Some message related to the release?"
+        tag: ${{ steps.read_version.outputs.VERSION }}
+        body: |
+          🎉 New version is here!
+          
+          ${{ steps.changelog.outputs.latestBody }}

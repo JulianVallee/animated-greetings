@@ -1,12 +1,12 @@
 {
   "name": "animated-greetings",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "ts-node scripts/start-dev.ts",
     "build": "webpack --mode production",
-    "release": "standard-version --dry-run",
+    "release": "standard-version --skip.commit --skip.tag --skip.bump",
     "test": "run-s test:*",
     "test:unit": "jest --silent=false --passWithNoTests ./test/unit",
     "test:components": "jest --silent=false --passWithNoTests ./test/components",
