@@ -16,7 +16,7 @@
  * Plugin Name:       Animated Greetings
  * Plugin URI:        https://vallee.io/
  * Description:       Animated greetings.
- * Version:           1.0.5
+ * Version:           1.0.6
  * Author:            Julian Vallée
  * Author URI:        https://vallee.io/
  * License:
@@ -39,7 +39,7 @@ error_reporting(E_ALL);
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('ANIMATED_GREETINGS_VERSION', '1.0.5');
+define('ANIMATED_GREETINGS_VERSION', '1.0.6');
 
 /**
  * The code that runs during plugin activation.

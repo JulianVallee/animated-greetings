@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.6](https://github.com/JulianVallee/animated-greetings/compare/v1.0.5...v1.0.6) (2021-12-31)
+
+
+### Build System
+
+* **git:** only trigger build action on pull requests ([11745f9](https://github.com/JulianVallee/animated-greetings/commits/11745f94040dde228487819adb1e232fbc2c4bda))
+* **npm:** add release:update npm script ([b5f6518](https://github.com/JulianVallee/animated-greetings/commits/b5f651848110c96a269d8dfb04d500ed7ce69506))
+
 ### [1.0.5](https://github.com/JulianVallee/animated-greetings/compare/v1.0.4...v1.0.5) (2021-12-31)
 
 
