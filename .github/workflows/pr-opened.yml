@@ -1,13 +1,12 @@
 # This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Release
+name: Pull request opened
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
+    types: [ opened ]
 
 jobs:
   build:
@@ -31,23 +30,4 @@ jobs:
     - run: npm run test:unit
     - run: npm run test:components
     - run: npm run build --if-present
-
-      # This step reads a file from repo and use it for body of the release
-      # This works on any self-hosted runner OS
-    - name: Parse version from package.json
-      id: read_version
-      shell: bash
-      run: |
-        VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
-        echo "::set-output name=VERSION::$VERSION"
-
-    - name: Create release including build files
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./dist/animated-greetings.zip
-        tag: ${{ steps.read_version.outputs.VERSION }}
-        body: |
-          🎉 New version is here!
-          
-          TODO: Add changelog here
+    - run: npm run test:e2e
