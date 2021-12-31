@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/JulianVallee/animated-greetings/compare/v1.0.4...v1.0.5) (2021-12-31)
+
+
+### Build System
+
+* **versioning:** fix typo in .versionrc ([9f2ba69](https://github.com/JulianVallee/animated-greetings/commits/9f2ba69b188f9201dc9b3ff406175d37ec3d98bc))
+* **versioning:** improve automated version bumping ([06f2cc2](https://github.com/JulianVallee/animated-greetings/commits/06f2cc25f462b029eebceb09cffdbb18aa72fb39))
+* **versioning:** improve automated version bumping ([b65a4e6](https://github.com/JulianVallee/animated-greetings/commits/b65a4e62aba5898b2a87d933c7b5c86d3cc54430))
+* **versioning:** improve automated versioning ([d811f52](https://github.com/JulianVallee/animated-greetings/commits/d811f52fc1da64843b4c7b7691ae04df33caae27))
+* **versioning:** manually fix changelog ([3d71cda](https://github.com/JulianVallee/animated-greetings/commits/3d71cdaf7d79f358e4149e953bce740ae87d44f3))
+
 ### [1.0.4](https://github.com/JulianVallee/animated-greetings/compare/v1.0.3...v1.0.4) (2021-12-31)
 
 
