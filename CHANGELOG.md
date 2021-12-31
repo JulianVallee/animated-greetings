@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11](https://github.com/JulianVallee/animated-greetings/compare/v1.0.10...v1.0.11) (2021-12-31)
+
+
+### Build System
+
+* **actions:** possible release changelog action fix ([d51c221](https://github.com/JulianVallee/animated-greetings/commits/d51c221659e8302b7f0248fa8c872b2fa7eb641d))
+
 ### [1.0.10](https://github.com/JulianVallee/animated-greetings/compare/v1.0.9...v1.0.10) (2021-12-31)
 
 
