@@ -2,7 +2,9 @@
  * Based on https://ellisonleao.github.io/sharer.js/
  */
 export default class Sharer {
-    constructor(elem) {
+    private elem: Element;
+
+    constructor(elem: Element) {
         this.elem = elem;
         this.share();
     }
@@ -379,6 +381,7 @@ export default class Sharer {
                     },
                 },
             };
+        /* @ts-ignore */
         const s = sharers[sharer];
 
         // custom popups sizes
@@ -392,10 +395,10 @@ export default class Sharer {
     /**
      *  @function getValue
      *  @description Helper to get the attribute of a DOM element
-     *  @param {String} attr DOM element attribute
-     *  @returns {String|null} returns the attr value or empty string
+     *  @param {string} attr DOM element attribute
+     *  @returns {string} returns the attr value or empty string
      */
-    getValue(attr) {
+    getValue(attr: string) {
         let val = this.elem.getAttribute('data-' + attr);
 
         // handing facebook hashtag attribute
@@ -404,14 +407,15 @@ export default class Sharer {
                 val = '#' + val;
             }
         }
-        return val;
+
+        return val ?? '';
     }
 
     /**
      * @event urlSharer
      * @param {Object} sharer
      */
-    urlSharer(sharer) {
+    urlSharer(sharer: any) {
         let p = sharer.params || {};
         let keys = Object.keys(p);
         let i;
@@ -436,8 +440,8 @@ export default class Sharer {
             let popParams = 'scrollbars=no, width=' + popWidth + ', height=' + popHeight + ', top=' + top + ', left=' + left;
             let newWindow = window.open(sharer.shareUrl, '', popParams);
 
-            if (window.focus) {
-                newWindow.focus();
+            if (document.hasFocus()) {
+                newWindow?.focus();
             }
 
         } else {

@@ -5,10 +5,10 @@ import EditorButtonComponent from "./EditorButton";
 import SharerComponent from './Sharer.vue';
 
 /* Modules */
-import Api from "./js/api.js";
+import Api from "./js/api";
 
 /* Type Definitions */
-import EditorInputData from "./js/types/editor-input-data.js";
+import EditorInputData from "./js/types/editor-input-data";
 
 export default {
   components: {

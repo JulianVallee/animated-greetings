@@ -73,7 +73,6 @@ export default {
   },
   mounted() {
     this.$log("Mounted");
-    this.$log('Store resetState:', store.resetState);
 
     // Call it once for initialization
     this.initBackgroundEffect();
@@ -92,7 +91,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$log("beforeDestroy");
+    this.$log("BeforeDestroy");
 
     if (module.hot) {
       module.hot.removeStatusHandler(this.onHmrUpdateComplete);
@@ -123,7 +122,6 @@ export default {
   },
   computed: {
     classesAnimation() {
-      console.log(this.isPaused);
       return {
         'animation': true,
         'paused': this.isPaused,
@@ -157,7 +155,7 @@ export default {
 
       if(el.length) {
         this.$log(`Initializing background effect`)
-        this.activeEffect = new SnowEffect(el[0], 200);
+        this.activeEffect = new SnowEffect(el[0], 20);
       }
     },
 
@@ -501,28 +499,16 @@ export default {
     },
 
     onHmrUpdateComplete(status) {
-      this.$log(`HMR Status: ${status}`);
-
       switch(status) {
         case 'prepare':
-          // this.beforeUpdate();
-          // console.log("########################");
-          // console.log(this.loaded);
-          // console.log(this.options.startPaused);
-          // console.log(this.paused);
-          // console.log(this.timeline.paused);
-          // console.log(this.isPaused);
-          // console.log("#########################");
           store.resetState = this.getStateSnapshot();
           break;
 
-        case 'idle':
-          this.update(store.resetState);
-          store.resetState = null;
-          break;
+        // case 'idle':
+        //   this.update(store.resetState);
+        //   store.resetState = null;
+        //   break;
       }
-
-      this.$log('Store resetState after HMR update:', store.resetState);
     }
   }
 };

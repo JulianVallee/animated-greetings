@@ -1,5 +1,5 @@
 <script>
-import Sharer from "./js/sharer.js";
+import Sharer from "./js/sharer";
 
 export default {
   data() {

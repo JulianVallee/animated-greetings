@@ -6,7 +6,7 @@ import TransitionPanelComponent from "./TransitionPanel";
 import TransitionPanelContainerComponent from "./TransitionPanelContainer";
 import LocaleChangerComponent from "./LocaleChanger";
 
-import EditorInputData from "./js/types/editor-input-data.js";
+import EditorInputData from "./js/types/editor-input-data";
 
 export default {
   components: {

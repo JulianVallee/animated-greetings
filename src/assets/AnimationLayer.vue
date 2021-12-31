@@ -1,6 +1,5 @@
 <script>
 import { GetAnimation } from "./js/animations";
-import EditorInputData from "./js/types/editor-input-data.js";
 
 const FONT_SIZE_MIN = 0.5;
 

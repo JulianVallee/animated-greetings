@@ -19,7 +19,7 @@ module.exports = {
     devtool: 'source-map',
     entry: {
         admin: "./src/admin/assets/main.js",
-        public: "./src/public/assets/main.js",
+        public: "./src/public/assets/main.ts",
     },
     output: {
         path: path.resolve(__dirname, "dist"),

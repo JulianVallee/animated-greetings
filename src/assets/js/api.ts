@@ -6,7 +6,7 @@ export class ApiCore {
         }
     };
 
-    static json(url, data) {
+    static json(url: string, data: any) {
         return fetch(url, {
             method: 'POST',
             headers: this.headers.json,
@@ -16,7 +16,7 @@ export class ApiCore {
 }
 
 export default class Api {
-    static generateLink(url, inputsData) {
+    static generateLink(url: string, inputsData: any) {
         return ApiCore.json(url, {
             inputs: inputsData
         })

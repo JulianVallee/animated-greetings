@@ -10,14 +10,15 @@
  * @param delay
  * @returns {(function(): void)|*}
  */
-export default (fn, delay) => {
-    let timeoutID = null;
+export default (fn: (args: IArguments) => void, delay: number) => {
+    let timeoutID: NodeJS.Timeout;
+
     return function() {
         clearTimeout(timeoutID);
         const args = arguments;
-        const that = this;
-        timeoutID = setTimeout(function () {
-            fn.apply(that, args);
+        timeoutID = setTimeout(()=> {
+            /* @ts-ignore */
+            fn.apply(this, args);
         }, delay);
     }
 }

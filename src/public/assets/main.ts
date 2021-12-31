@@ -4,13 +4,12 @@
 import Vue from "vue";
 import VueI18n from 'vue-i18n';
 import VueSlider from 'vue-slider-component';
-import LoggerPlugin from './../../assets/js/logger';
 
 /**
  * Source
  */
 import App from "./../../assets/App.vue";
-import LoggerMixin from "../../assets/js/logger.ts";
+import LoggerPlugin from './../../assets/js/logger';
 
 /**
  * Setup FontAwesome core, icons and Vue component
@@ -44,7 +43,9 @@ Vue.component('vue-slider', VueSlider);
 Vue.use(VueI18n);
 Vue.use(LoggerPlugin);
 
+/* @ts-ignore */
 window.AnimatedGreetings = new Vue({
+    /* @ts-ignore */
     logger: {
         enabled: true
     },
