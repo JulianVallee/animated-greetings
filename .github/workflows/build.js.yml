@@ -32,12 +32,19 @@ jobs:
     - run: npm run test:components
     - run: npm run build --if-present
 
+    # This step reads a file from repo and use it for body of the release
+    # This works on any self-hosted runner OS
+    - name: Read package.json and use it as a body of new release
+      id: read_release
+      shell: bash
+      run: |
+        VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
+        echo "::set-output name=VERSION::$VERSION"
+
     - name: Upload build files to release
       uses: svenstaro/upload-release-action@v2
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./dist/animated-greetings.zip
-        tag: ${{ github.ref }}
+        tag: ${{ steps.read_release.outputs.VERSION }}
         body: "Some message related to the release?"
