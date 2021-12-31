@@ -1,6 +1,6 @@
 <script>
 import EditorComponent from "./Editor";
-import PlayerComponent from "./Animation";
+import PlayerComponent from "./Player";
 import PanelComponent from "./Panel";
 import TransitionPanelComponent from "./TransitionPanel";
 import TransitionPanelContainerComponent from "./TransitionPanelContainer";
@@ -175,12 +175,12 @@ export default {
     }
   },
   beforeMount: function() {
-    this.log("BeforeMounted");
+    this.$log("BeforeMounted");
     this.loadOptions();
     this.loadData();
   },
   mounted: function() {
-    this.log("Mounted");
+    this.$log("Mounted");
   },
   watch: {
     'options.editorShow'(newValue, oldValue) {
@@ -196,11 +196,11 @@ export default {
   },
   methods: {
     loadOptions() {
-      this.log("Loading options...");
+      this.$log("Loading options...");
 
       /* global animatedGreetingsOptions */
       if(typeof animatedGreetingsOptions !== 'undefined') {
-        this.log('Found options!', animatedGreetingsOptions);
+        this.$log('Found options!', animatedGreetingsOptions);
 
         for(const key in this.options) {
           if(animatedGreetingsOptions.hasOwnProperty(key)) {
@@ -216,11 +216,11 @@ export default {
     },
 
     loadData() {
-      this.log("Loading data...");
+      this.$log("Loading data...");
 
       /* global animatedGreetingsData */
       if(typeof animatedGreetingsData !== 'undefined') {
-        this.log('Found data!', animatedGreetingsData);
+        this.$log('Found data!', animatedGreetingsData);
 
         this.$data.inputs = animatedGreetingsData?.inputs ?? [];
       }
@@ -232,7 +232,7 @@ export default {
           this.inputs.push(EditorInputData.createInstance(inputValue));
         }
 
-        this.log('Created dummy data:', this.inputs);
+        this.$log('Created dummy data:', this.inputs);
 
       }
 
@@ -297,11 +297,12 @@ export default {
       </transition-panel>
 
       <transition-panel v-if="options.player" :show="options.playerShow" :colored="options.editorShow" v-on:after-enter="updatePlayer">
-        <player
-            ref="player"
-            :inputs="inputs"
-            :options="options"
-            :standalone="!options.editorShow"/>
+          <player
+              key="player"
+              ref="player"
+              :inputs="inputs"
+              :options="options"
+              :standalone="!options.editorShow"/>
       </transition-panel>
 
     </transition-panel-container>

@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -7,6 +9,7 @@ const Autoprefixer = require("autoprefixer");
 const ZipPlugin = require('zip-webpack-plugin');
 const { responseInterceptor } = require('http-proxy-middleware');
 
+const SCHEMA = 'http';
 const URI = 'localhost';
 const DOCKER_PORT = 8080;
 const PROXY_PORT = 8081;
@@ -20,8 +23,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist"),
-        publicPath: `http://${URI}:${DOCKER_PORT}/wp-content/plugins/animated-greetings/`,
-        filename: '[name]/bundle.js', // Hacky way to force webpack to have multiple output folders vs multiple files per one path
+        publicPath: `${SCHEMA}://${URI}:${DOCKER_PORT}/wp-content/plugins/animated-greetings/`,
+        filename: '[name]/bundle.js'
     },
     module: {
         rules: [
@@ -135,7 +138,7 @@ module.exports = {
             // the prefix for the files included in the zip file
             pathPrefix: 'animated-greetings',
 
-        }),
+        })
         // new WebpackBuildNotifierPlugin({
         //     title: "Animated Greetings Build"
         // })
@@ -166,28 +169,30 @@ module.exports = {
         allowedHosts: 'all',
 
         /**
-         * important if you want to enable HMR even without using the port number like:
-         * https://dev.your-projects-local-hostname
+         * Write the output files to disk so docker can pick them up
          *
          **/
         devMiddleware: {
             writeToDisk: true,
         },
-        //
+
+        /**
+         * Enable/disable handling exit signals within webpack dev server
+         */
         // setupExitSignals: false,
 
         /**
-         * proxy all the express.js requests to apache
+         * Proxy all webpack dev server requests to apache
          **/
         proxy: {
             '/': {
-                target: `http://${URI}:${DOCKER_PORT}`,
+                target: `${SCHEMA}://${URI}:${DOCKER_PORT}`,
 
-                /**
-                 * webpack docs https://webpack.js.org/configuration/dev-server#devserverproxy:
-                 * "A backend server running on HTTPS with an invalid certificate will not be accepted by default. If you want to, modify your config like this:"
-                 **/
-                secure: false,
+                // /**
+                //  * webpack docs https://webpack.js.org/configuration/dev-server#devserverproxy:
+                //  * "A backend server running on HTTPS with an invalid certificate will not be accepted by default. If you want to, modify your config like this:"
+                //  **/
+                // secure: false,
 
                 /**
                  * webpack docs:

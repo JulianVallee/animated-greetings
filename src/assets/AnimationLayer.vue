@@ -7,7 +7,10 @@ const FONT_SIZE_MIN = 0.5;
 export default {
   data() {
     return {
-      animationData: null
+      animationData: null,
+      options: {
+        logging: true
+      }
     }
   },
   props: {
@@ -33,6 +36,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted() {
+    this.$log("Mounted");
   },
   methods: {
     /**

@@ -1,17 +1,23 @@
 <script>
 /* Components */
 import AnimationLayerComponent from "./AnimationLayer";
+import PlayerButtonComponent from "./PlayerButton";
+import PlayerProgressBarComponent from "./PlayerProgressBar";
 
 /* Modules */
 import anime from 'animejs/lib/anime.es.js';
-import snow from '../assets/js/snow.js';
+import SnowEffect from './js/snow';
 
 /* Data */
-import { GetAnimation } from "./js/animations";
+import {GetAnimation} from "./js/animations";
+
+import store from './js/store';
 
 export default {
   components: {
-    'animation-layer': AnimationLayerComponent
+    'animation-layer': AnimationLayerComponent,
+    'player-button': PlayerButtonComponent,
+    'player-progress-bar': PlayerProgressBarComponent
   },
   props: {
     inputs: Array,
@@ -22,38 +28,19 @@ export default {
     return {
       loaded: false,
 
-      paused: false,
+      paused: true,
+      seeking: false,
 
       isResetting: false,
 
-      resetState: {
-        inputLength: 0,
-        progress: 0,
-        duration: null,
-        currentTime: null,
-        paused: false
-      },
+      resetState: null,
 
+      /**
+       * @see https://nightcatsama.github.io/vue-slider-component/#/basics
+       */
       timeline: null,
 
-      timelineOptions: {
-        // See https://nightcatsama.github.io/vue-slider-component/#/basics/tooltip
-        tooltip: 'always',
-
-        // See https://nightcatsama.github.io/vue-slider-component/#/basics/tooltip
-        tooltipFormatter: value => this.formatTime(value),
-
-        // See https://nightcatsama.github.io/vue-slider-component/#/basics/marks
-        marks: {},
-
-        // Custom implementation
-        marksFormatter: (value, markIndex, marksCount) => {
-          const isLastMark = markIndex === marksCount;
-          return isLastMark
-              ? this.$t('end')
-              : markIndex + 1
-        }
-      },
+      activeEffect: null,
 
       // We cache the length of the "inputs" prop, so we can
       // compare it against the new array length in our watcher
@@ -81,31 +68,50 @@ export default {
       }
     }
   },
+  logger: {
+    enabled: true,
+  },
   mounted() {
-    this.log("Mounted");
-
-    snow.init(this.$el.getElementsByClassName('animation__canvas-effect')[0], 200);
+    this.$log("Mounted");
+    this.$log('Store resetState:', store.resetState);
 
     // Call it once for initialization
+    this.initBackgroundEffect();
     this.updateResponsiveFactor();
-    this.resizeObserver = new ResizeObserver(this.updateResponsiveFactor);
+    this.update(store.resetState);
+
+    if(!this.resizeObserver) {
+      this.resizeObserver = new ResizeObserver(this.updateResponsiveFactor);
+    }
+    this.resizeObserver.unobserve(this.$el);
     this.resizeObserver.observe(this.$el);
 
-    this.update();
+    // Manual HMR support, that's what we get for using a library that acts on the DOM itself...
+    if (module.hot) {
+      module.hot.addStatusHandler(this.onHmrUpdateComplete);
+    }
   },
-  unmounted() {
+  beforeDestroy() {
+    this.$log("beforeDestroy");
+
+    if (module.hot) {
+      module.hot.removeStatusHandler(this.onHmrUpdateComplete);
+    }
+
     this.resizeObserver.unobserve(this.$el);
+
+    this.removeTimeline();
   },
   watch: {
     inputs(dataNew, dataOld) {
-      this.log("Watcher 'inputs' triggered");
+      this.$log("Watcher 'inputs' triggered");
 
       // We only need to reset if elements got added/removed,
       // not if their content changes
       if(dataNew.length !== this.inputsLengthOld) {
-        this.update();
       }
 
+      this.update();
       // Arrays and objects have the same value for new and old data,
       // see https://vuejs.org/v2/api/#vm-watch
       this.inputsLengthOld = dataNew.length;
@@ -117,9 +123,11 @@ export default {
   },
   computed: {
     classesAnimation() {
+      console.log(this.isPaused);
       return {
         'animation': true,
-        'paused': this.isPaused
+        'paused': this.isPaused,
+        'playing': !this.isPaused,
       }
     },
     classesOverlay() {
@@ -129,39 +137,44 @@ export default {
       };
     },
     footerButtonIcon() {
-      return this.isPaused ? 'play' : 'pause';
+      return ['fas', this.isPaused ? 'play' : 'pause'];
     },
     buttonFullscreenIcon() {
       return ['fas', this.options.playerFullscreen ? 'compress' : 'expand'];
     },
     isPaused() {
-      if(!this.loaded) {
+      if(!this.loaded && store.resetState === null) {
         return this.options.startPaused;
       }
 
-      return this.timeline.paused || this.paused;
-    },
-    timelineProgress() {
-      return this.isResetting
-          ? this.resetState.progress
-          : this.timeline ? this.timeline.progress : 0;
-    },
+      return this?.timeline?.paused || this.paused;
+    }
   },
   methods: {
+    initBackgroundEffect() {
+      const selector = 'animation__canvas-effect';
+      const el = this.$el.getElementsByClassName(selector);
+
+      if(el.length) {
+        this.$log(`Initializing background effect`)
+        this.activeEffect = new SnowEffect(el[0], 200);
+      }
+    },
+
     play() {
-      this.log("Playing timeline");
+      this.$log("Playing timeline");
 
       this.timeline.play();
       this.paused = false;
     },
     pause() {
-      this.log("Pausing timeline");
+      this.$log("Pausing timeline");
 
       this.timeline.pause();
       this.paused = true;
     },
     togglePlay() {
-      this.log("Toggling timeline");
+      this.$log("Toggling timeline");
 
       if(this.timeline.paused) {
         this.play();
@@ -169,8 +182,42 @@ export default {
         this.pause();
       }
     },
+
+    seekStart() {
+      this.$log("Seek start");
+
+      this.timeline.pause();
+      this.seeking = true;
+    },
+
+    /**
+     * @param {number} value The time to seek to in percentage of the whole timeline duration
+     */
+    seekByPercentage(value) {
+      const timeInMs = ((value / 100) * this.timeline.duration) || 0;
+      this.timeline.seek(((value / 100) * this.timeline.duration) || 0);
+
+      this.$log(`Seeked to ${value}% / ${timeInMs}ms`);
+    },
+
+    /**
+     * @param {number} value The time to seek to in ms
+     */
+    seekByTime(value) {
+      this.timeline.seek(value);
+    },
+
+    seekEnd() {
+      this.$log("Seek end");
+
+      if(!this.paused) {
+        this.timeline.play();
+      }
+      this.seeking = true;
+    },
+
     toggleFullscreen() {
-      this.log("Toggling fullscreen");
+      this.$log("Toggling fullscreen");
 
       if(this.options.editor) {
         this.options.editorShow = !this.options.editorShow;
@@ -219,8 +266,8 @@ export default {
 
     },
 
-    createTimeline() {
-      this.log("Creating new timeline");
+    createTimeline(stateSnapshot) {
+      this.$log("Creating new timeline");
 
       this.timeline = anime.timeline({
         loop: true,
@@ -269,28 +316,111 @@ export default {
             delay: this.options.durationAfter > 0 ? this.options.durationAfter : 1
           });
 
-      this.updateTimelineMarks();
+      if(stateSnapshot !== null) {
 
-      if(!this.loaded) {
-        this.loaded = true;
-
-        if(!this.options.startPaused) {
-          this.play();
-        }
-
-      } else {
-        if(this.resetState.currentTime !== null) {
-          let value = Math.min(this.resetState.currentTime, this.timeline.duration);
+        if(stateSnapshot.currentTime !== null) {
+          let value = Math.min(stateSnapshot.currentTime, this.timeline.duration);
           value = value ? value : 0;
           this.timeline.seek(value);
         }
 
-        if(!this.resetState.paused) {
+        if(!stateSnapshot.paused) {
           this.play();
         }
+
+      } else if(!this.loaded) {
+        if(!this.options.startPaused) {
+          this.play();
+        }
+
       }
 
+      if(!this.loaded) {
+        this.$log("Setting loaded to true");
+        this.loaded = true;
+      }
+
+      this.$log(`Loaded:`, this.loaded);
       this.updateResponsiveFactor();
+    },
+
+    /**
+     * Remove/dispose a timeline.
+     * Anime.js API doesn't provide an intuitive way to dispose an animation.
+     * @returns {Promise<unknown>}
+     */
+    removeTimeline() {
+      this.$log("Removing timeline");
+
+      return new Promise(resolve => {
+        if(this.timeline) {
+          this.timeline.reset();
+          this.timeline.children = [];
+        }
+
+        this.$nextTick(() => {
+          resolve();
+        });
+      })
+    },
+
+    /**
+     * Update the timeline.
+     */
+    update(stateSnapshot = false) {
+      this.$log("Updating timeline");
+
+      if(this.isResetting) {
+        this.$log(
+            "Called update() while already updating, skipping! " +
+            "If this keeps popping up and/or causes problems, debounce the update() function!"
+        );
+
+      } else {
+
+        const state = stateSnapshot
+            ? stateSnapshot
+            : this.getStateSnapshot();
+
+        this.$log('Update to state:', state);
+        this.isResetting = true;
+
+        this.removeTimeline()
+            .then(() => {
+              this.createTimeline(state);
+              // this.afterUpdate();
+              this.isResetting = false;
+            });
+
+      }
+    },
+
+    /**
+     * Set state before updating/resetting the timeline.
+     */
+    beforeUpdate() {
+      this.isResetting = true;
+
+      // Get state that is used to render the UI in between two timelines
+      if(this.timeline) {
+        this.resetState.currentTime = this.timeline.currentTime;
+        this.resetState.paused = this.isPaused;
+      }
+    },
+
+    getStateSnapshot() {
+      return {
+        currentTime: this?.timeline?.currentTime || 0,
+        paused: this.isPaused
+      }
+    },
+
+    /**
+     * Set state after updating/resetting the timeline.
+     */
+    afterUpdate() {
+      this.isResetting = false;
+      this.resetState = {};
     },
 
     mergeAnimationTargetData(target, targetCounter, inputIndex) {
@@ -366,156 +496,35 @@ export default {
       }
     },
 
-    /**
-     * Remove/dispose a timeline.
-     * Anime.js API doesn't provide an intuitive way to dispose an animation.
-     * @returns {Promise<unknown>}
-     */
-    removeTimeline() {
-      this.log("Removing timeline");
-
-      return new Promise(resolve => {
-        if(this.timeline) {
-          this.timeline.reset();
-          this.timeline.children = [];
-        }
-
-        this.$nextTick(() => {
-          resolve();
-        });
-      })
-    },
-
-    /**
-     * Update the timeline.
-     */
-    update() {
-      this.log("Resetting timeline");
-
-      if(this.isResetting) {
-        this.log(
-            "Called update() while already resetting! " +
-            "If this keeps popping up and/or causes problems, debounce the update() function!"
-        );
-
-      } else {
-        this.beforeUpdate();
-        this.removeTimeline()
-            .then(() => {
-              this.createTimeline();
-              this.afterUpdate();
-            });
-
-      }
-    },
-
-    /**
-     * Set state before updating/resetting the timeline.
-     */
-    beforeUpdate() {
-      this.isResetting = true;
-
-      // Get state that is used to render the UI in between two timelines
-      if(this.timeline) {
-        this.resetState.progress = this.timeline.progress;
-        this.resetState.duration = this.timeline.duration;
-        this.resetState.currentTime = this.timeline.currentTime;
-        this.resetState.paused = this.isPaused;
-      }
-    },
-
-    /**
-     * Set state after updating/resetting the timeline.
-     */
-    afterUpdate() {
-      this.isResetting = false;
-      this.resetState = {};
-    },
-
-    updateTimelineMarks() {
-      this.log("Updating timeline marks");
-
-      const marks = {};
-
-      let position = 0;
-      let markIndex = 0;
-      const markPosition = 'peak';
-      let captureMark = false;
-
-
-      // We have one in, one out and one for additional delay, therefore this is 3
-      // TODO: Automatically set this depending on the used animation
-      const targetsPerMark = 2;
-      const childCount = this.timeline.children.length;
-      const marksCount = (childCount - 2) / targetsPerMark;
-
-      for(let childIndex = 0; childIndex < childCount; childIndex++) {
-        switch(markPosition) {
-          case 'start':
-            captureMark = childIndex > 0 && childIndex < childCount - 1 && childIndex % targetsPerMark !== 0;
-            break;
-
-          case 'peak':
-            captureMark = childIndex > 1 && childIndex < childCount - 1 && childIndex % targetsPerMark === 0;
-            break;
-
-          case 'end':
-            captureMark = childIndex > 2 && childIndex && childIndex % targetsPerMark !== 0;
-            break;
-        }
-
-        if(captureMark) {
-          let label = position;
-
-          if(this.timelineOptions.marksFormatter instanceof Function) {
-            label = this.timelineOptions.marksFormatter(position, markIndex, marksCount);
-          }
-
-          // Add position and label
-          marks[`${position}`] = {
-            label: label
-          };
-
-          // Increment the displayed label index
-          markIndex++;
-        }
-
-        // Increment afterwards
-        position += this.timeline.children[childIndex].duration / this.timeline.duration * 100;
-      }
-
-      this.timelineOptions.marks = marks;
-    },
-    formatTime(value) {
-      if(!this.timeline) {
-        return '0s';
-      }
-
-      const normalized = value / 100;
-
-      return `${Math.round(normalized * this.timeline.duration / 100) / 10}s`;
-    },
-
-    onTimelineSliderMouseDown() {
-      this.timeline.pause();
-    },
-    onTimelineSliderMouseUp() {
-      // The timeline is paused while dragging the slider,
-      // but the animation is not paused.
-      if(!this.paused) {
-        this.timeline.play();
-      }
-    },
-    onTimelineSliderInput(value, index) {
-      value = this.timeline.duration * (value / 100);
-      value = value ? value : 0;
-      this.timeline.seek(value);
-    },
-
     updateResponsiveFactor() {
       this.playerResponsiveFactor = this.$el.offsetWidth / 100;
     },
-  },
+
+    onHmrUpdateComplete(status) {
+      this.$log(`HMR Status: ${status}`);
+
+      switch(status) {
+        case 'prepare':
+          // this.beforeUpdate();
+          // console.log("########################");
+          // console.log(this.loaded);
+          // console.log(this.options.startPaused);
+          // console.log(this.paused);
+          // console.log(this.timeline.paused);
+          // console.log(this.isPaused);
+          // console.log("#########################");
+          store.resetState = this.getStateSnapshot();
+          break;
+
+        case 'idle':
+          this.update(store.resetState);
+          store.resetState = null;
+          break;
+      }
+
+      this.$log('Store resetState after HMR update:', store.resetState);
+    }
+  }
 };
 </script>
 
@@ -537,7 +546,7 @@ export default {
                            :class="['animation__canvas-text', 'animation__canvas-text--' + key]"
                            :input="input"
                            :key="key"
-                           :responsiveFactor="playerResponsiveFactor" />
+                           :responsiveFactor="playerResponsiveFactor"/>
         </div>
 
         <div :class="classesOverlay" v-on:click="onClickOverlay"></div>
@@ -545,26 +554,15 @@ export default {
 
         <div class="animation__footer" v-if="options.controlsEnable || options.playerFullscreen">
           <div class="animation__footer__inner">
-            <vue-slider class="animation__timeline-slider"
-                        :value="timelineProgress"
-                        :marks="timelineOptions.marks"
-                        :tooltip="options.timelineDecorations ? timelineOptions.tooltip : 'none'"
-                        :tooltip-formatter="timelineOptions.tooltipFormatter"
-                        :hide-label="!options.timelineDecorations"
-                        :duration="0"
-                        :drag-on-click="true"
-                        v-on:drag-start="onTimelineSliderMouseDown"
-                        v-on:drag-end="onTimelineSliderMouseUp"
-                        v-on:change="onTimelineSliderInput"
-                        v-if="options.timeline"/>
+            <player-progress-bar
+                :timeline="timeline"
+                :is-resetting="isResetting"
+                v-on:drag-start="seekStart"
+                v-on:drag-end="seekEnd"
+                v-on:change="seekByPercentage"/>
 
-            <div class="animation__footer-button" v-on:click="togglePlay()">
-              <font-awesome-icon :icon="footerButtonIcon" />
-            </div>
-
-            <div class="animation__footer-button" v-on:click="toggleFullscreen()">
-              <font-awesome-icon :icon="buttonFullscreenIcon" />
-            </div>
+            <player-button :icon="footerButtonIcon" v-on:click="togglePlay"/>
+            <player-button :icon="buttonFullscreenIcon" v-on:click="toggleFullscreen"/>
           </div>
         </div>
 
@@ -656,32 +654,6 @@ export default {
       display: flex;
     }
 
-    &-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 1rem;
-      height: 100%;
-      top: 0;
-      padding: 0 2rem;
-      border-radius: 0;
-      color: $playerIconColor;
-      cursor: pointer;
-      z-index: 2;
-      transition: color $transitionDuration;
-
-      &:first-of-type {
-        left: 0;
-      }
-
-      &:last-of-type {
-        right: 0;
-      }
-
-      &:hover {
-        color: rgba(255, 255, 255, 1);
-      }
-    }
   }
 
   // Footer depends on parent
@@ -689,28 +661,6 @@ export default {
     .animation__footer {
       opacity: 1;
       bottom: 0;
-    }
-  }
-
-  &__timeline-slider {
-    position: absolute !important;
-    width: 100% !important;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-    z-index: 1;
-    margin: -11px auto 0 auto;
-
-    .vue-slider-dot-handle {
-      display: none;
-    }
-
-    .vue-slider-process {
-      background-color: $playerSliderProgressColor;
-    }
-
-    .vue-slider-rail {
-      background-color: $playerSliderRailColor;
     }
   }
 }

@@ -27,7 +27,7 @@ export default {
     options: Object
   },
   mounted: function() {
-    this.log("Mounted");
+    this.$log("Mounted");
   },
   watch: {
 
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     addInput() {
-      this.log(`Adding input`);
+      this.$log(`Adding input`);
 
       if(!this.hasMaxInputs) {
         this.inputs.push(this.getNewInput(this.inputs.length))
@@ -76,7 +76,7 @@ export default {
     },
 
     updateInput(index, value) {
-      this.log(`Updating input`, index, value);
+      this.$log(`Updating input`, index, value);
 
       this.inputs[index].value = value;
       this.uid = null;
@@ -88,7 +88,7 @@ export default {
      * @param index
      */
     resetInput(index) {
-      this.log(`Clearing input`, index);
+      this.$log(`Clearing input`, index);
       this.$set(this.inputs, index, this.getNewInput(index, false));
     },
 
@@ -97,7 +97,7 @@ export default {
      * @param index
      */
     deleteInput(index) {
-      this.log(`Deleting input`, index);
+      this.$log(`Deleting input`, index);
 
       if(this.activeInput === index) {
         this.setActiveInput(null)
@@ -120,34 +120,34 @@ export default {
     },
 
     setActiveInput(index) {
-      this.log(`Setting active input`, index);
+      this.$log(`Setting active input`, index);
 
       this.activeInput = index;
     },
 
     updatePlayer() {
-      this.log(`Triggering 'update' event`);
+      this.$log(`Triggering 'update' event`);
       this.$emit('update');
     },
 
     generateLink() {
-      this.log(`Generating link`);
+      this.$log(`Generating link`);
 
       Api.generateLink(this.getApiLink, this.inputs)
         .then((uid) => {
           this.uid = uid;
-          this.log({
+          this.$log({
             uid: uid,
             link: this.getPlayerLink
           });
         })
         .catch(err => {
-          this.log(err);
+          this.$log(err);
         });
     },
 
     reset() {
-      this.log(`Resetting`);
+      this.$log(`Resetting`);
 
       const inputs = [];
 

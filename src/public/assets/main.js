@@ -2,14 +2,15 @@
  * Core libraries
  */
 import Vue from "vue";
-import VueI18n from 'vue-i18n'
-import VueSlider from 'vue-slider-component'
+import VueI18n from 'vue-i18n';
+import VueSlider from 'vue-slider-component';
+import LoggerPlugin from './../../assets/js/logger';
 
 /**
  * Source
  */
 import App from "./../../assets/App.vue";
-import LoggerMixin from "./../../assets/js/mixins/logger.ts";
+import LoggerMixin from "../../assets/js/logger.ts";
 
 /**
  * Setup FontAwesome core, icons and Vue component
@@ -35,20 +36,20 @@ faLibrary.add(faXingSquare);
 faLibrary.add(faFacebook);
 faLibrary.add(faTwitter);
 
+Vue.config.productionTip = false
+
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('vue-slider', VueSlider);
 
 Vue.use(VueI18n);
-Vue.mixin(LoggerMixin);
-
-// TODO: App options should come via props
-const props = {
-
-};
+Vue.use(LoggerPlugin);
 
 window.AnimatedGreetings = new Vue({
+    logger: {
+        enabled: true
+    },
     i18n: new VueI18n({
         locale: 'de'
     }),
-    render: (h) => h(App, {props}),
+    render: (h) => h(App, {}),
 }).$mount("#animated-greetings-container");

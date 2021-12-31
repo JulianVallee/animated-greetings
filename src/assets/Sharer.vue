@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     copyLink() {
-      this.log(`Copying link to clipboard`);
+      this.$log(`Copying link to clipboard`);
       navigator.clipboard.writeText(this.url);
     },
   },
