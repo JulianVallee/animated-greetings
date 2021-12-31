@@ -16,17 +16,17 @@
   "packageFiles": [
     {
       "filename": "./package.json",
-      "updater": "json"
+      "type": "json"
     }
   ],
   "bumpFiles": [
     {
       "filename": "./package.json",
-      "updater": "json"
+      "type": "json"
     },
     {
       "filename": "./package.lock.json",
-      "updater": "json"
+      "type": "json"
     },
     {
       "filename": "./src/animated-greetings.php",
