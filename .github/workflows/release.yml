@@ -9,7 +9,7 @@ on:
     types: [ closed ]
 
 jobs:
-  build:
+  release:
 
     runs-on: ubuntu-latest
 
@@ -38,13 +38,16 @@ jobs:
         VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
         echo "::set-output name=VERSION::$VERSION"
 
+    - name: Build Changelog
+      id: build_changelog
+      uses: mikepenz/release-changelog-builder-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Create release including build files
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./dist/animated-greetings.zip
         tag: ${{ steps.read_version.outputs.VERSION }}
-        body: |
-          🎉 New version is here!
-          
-          TODO: Add changelog here
+        body: ${{steps.build_changelog.outputs.changelog}}
