@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Build
+name: Release
 
 on:
   push:
@@ -41,11 +41,7 @@ jobs:
         VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
         echo "::set-output name=VERSION::$VERSION"
 
-    - name: Parse latest changelog from CHANGELOG.md
-      id: changelog
-      uses: ocavue/changelog-parser-action@v1
-
-    - name: Upload build files to release
+    - name: Create release including build files
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -54,4 +50,4 @@ jobs:
         body: |
           🎉 New version is here!
           
-          ${{ steps.changelog.outputs.latestBody }}
+          TODO: Add changelog here
