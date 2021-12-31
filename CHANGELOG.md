@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Build System
 
+* **changelog:** remove broken changelog parser from workflow ([2c1959a](https://github.com/JulianVallee/animated-greetings/commits/2c1959adcb499dffa6b42e19caf1b07781981867))
 * **versioning:** fix typo in .versionrc ([9f2ba69](https://github.com/JulianVallee/animated-greetings/commits/9f2ba69b188f9201dc9b3ff406175d37ec3d98bc))
 * **versioning:** improve automated version bumping ([06f2cc2](https://github.com/JulianVallee/animated-greetings/commits/06f2cc25f462b029eebceb09cffdbb18aa72fb39))
 * **versioning:** improve automated version bumping ([b65a4e6](https://github.com/JulianVallee/animated-greetings/commits/b65a4e62aba5898b2a87d933c7b5c86d3cc54430))
