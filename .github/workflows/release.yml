@@ -37,7 +37,7 @@ jobs:
       id: read_version
       shell: bash
       run: |
-        VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
+        VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
         echo "::set-output name=VERSION::$VERSION"
 
     - name: Build Changelog
@@ -57,3 +57,5 @@ jobs:
         release_name: "v${{steps.read_version.outputs.VERSION}}"
         overwrite: true
         body: "${{steps.build_changelog.outputs.changelog}}"
+
+## TODO: Create a "Release vX.X.X" PR on tag push,
