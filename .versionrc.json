@@ -1,15 +1,9 @@
 {
   "types": [
-    {"type": "feat", "section": "Features"},
+    {"type": "feature", "section": "Features"},
     {"type": "fix", "section": "Bug Fixes"},
-    {"type": "build", "section": "Build System"},
-    {"type": "chore", "hidden": true},
-    {"type": "ci", "hidden": true},
-    {"type": "docs", "hidden": true},
-    {"type": "style", "hidden": true},
-    {"type": "refactor", "hidden": true},
-    {"type": "perf", "hidden": true},
-    {"type": "test", "hidden": true}
+    {"type": "test", "section": "Tests"},
+    {"type": "chore", "hidden": "Chores"}
   ],
   "commitUrlFormat": "https://github.com/{{owner}}/{{repository}}/commits/{{hash}}",
   "compareUrlFormat": "https://github.com/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
