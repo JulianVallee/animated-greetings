@@ -18,9 +18,10 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+      # Checkout the repository
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0
+        fetch-depth: 0 # Needed by build_changelog step to get all available tags, not only the latest
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
@@ -28,6 +29,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
+      # Install deps and build project
     - run: npm ci
     - run: npm run build --if-present
 
@@ -39,6 +41,7 @@ jobs:
       run: |
         VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
         echo "::set-output name=VERSION::$VERSION"
+        echo "::set-output name=TAG::v$VERSION"
 
     - name: Build Changelog
       id: build_changelog
@@ -53,9 +56,7 @@ jobs:
       with:
         repo_token: ${{secrets.GITHUB_TOKEN}}
         file: ./dist/animated-greetings.zip
-        tag: "v${{steps.read_version.outputs.VERSION}}"
-        release_name: "v${{steps.read_version.outputs.VERSION}}"
+        tag: "${{steps.read_version.outputs.TAG}}"
+        release_name: "${{steps.read_version.outputs.TAG}}"
         overwrite: true
         body: "${{steps.build_changelog.outputs.changelog}}"
-
-## TODO: Create a "Release vX.X.X" PR on tag push,
