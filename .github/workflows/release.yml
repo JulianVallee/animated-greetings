@@ -29,6 +29,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run test:components
+      - run: npm run build --if-present
+      - run: npm run test:e2e
+
+
       # Parse version
       - name: Parse version from package.json
         id: read_version
@@ -39,12 +46,7 @@ jobs:
           echo "::set-output name=TAG::v$VERSION"
 
         # Install deps and build project
-
-      - run: npm run test:unit
-      - run: npm run test:components
-      - run: npm run build --if-present
-      - run: npm run test:e2e
-
+        
       # Bump version, generate CHANGELOG.md, tag and push new commit
       - run: npm run release
 
