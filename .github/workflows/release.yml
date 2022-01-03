@@ -60,7 +60,7 @@ jobs:
       - name: Get changelog
         id: get_changelog
         run: |
-          CHANGELOG=$(npm run release:get-changelog)
+          CHANGELOG="$(npm run release:get-changelog)"
           echo "::set-output name=CHANGELOG::$CHANGELOG"
 
       # Create release
