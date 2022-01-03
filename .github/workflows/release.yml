@@ -58,7 +58,7 @@ jobs:
 
       # Bump version, generate CHANGELOG.md, tag and push new commit
 #      - run: npm run release
-      -
+      
 #      - run: npm run release:bump
 #      - run: npm run release:changelog
 #      - run: npm run release:tag
