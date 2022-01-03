@@ -44,4 +44,4 @@ that can be shared via various social media sites and messengers.
 You can read the full changelog [here](https://github.com/JulianVallee/animated-greetings/blob/master/CHANGELOG.md).
 
 ## License
-You can read the full changelog [here](https://github.com/JulianVallee/animated-greetings/blob/master/CHANGELOG.md).
+The files in this project are released under the [MIT License](https://github.com/JulianVallee/animated-greetings/blob/master/LICENSE).
