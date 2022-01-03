@@ -11,7 +11,8 @@
     "test:unit": "jest --silent=false --passWithNoTests ./test/unit",
     "test:components": "jest --silent=false --passWithNoTests ./test/components",
     "test:e2e": "jest --silent=false --passWithNoTests ./test/e2e",
-    "documentation:vue": "vuese gen",
+    "docgen": "run-s docgen:*",
+    "docgen:vue": "vuese gen",
     "postinstall": "curl -s -L https://wordpress.org/latest.tar.gz | tar -xz -C node_modules",
     "prepare": "husky install"
   },
@@ -42,11 +43,11 @@
     "@babel/preset-typescript": "^7.16.5",
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^16.0.0",
-    "@commitlint/prompt-cli": "^16.0.0",
     "@types/jest": "^27.0.3",
     "@types/semver": "^7.3.9",
     "@types/webpack-env": "^1.16.3",
     "@vue/test-utils": "^1.3.0",
+    "@vue/vue2-jest": "^27.0.0-alpha.4",
     "@vuese/cli": "^2.14.3",
     "autoprefixer": "^10.4.0",
     "babel-core": "^7.0.0-bridge.0",
@@ -73,7 +74,6 @@
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4",
-    "vue-jest": "^3.0.7",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.64.4",
@@ -95,7 +95,7 @@
       "vue"
     ],
     "transform": {
-      ".*\\.(vue)$": "vue-jest",
+      ".*\\.(vue)$": "@vue/vue2-jest",
       ".*\\.(js)$": "babel-jest",
       ".*\\.(ts)$": "ts-jest"
     }

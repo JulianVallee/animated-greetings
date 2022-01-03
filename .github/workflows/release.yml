@@ -38,9 +38,9 @@ jobs:
       - run: npm run build --if-present
       - run: npm run test:e2e
 
-      - run: npm run documentation:vue
 
       # Bumps version, generates CHANGELOG.md, commits the changes and pushes them with a new tag
+      - run: npm run docgen:vue
       - run: npm run release
 
       # Used for the release
