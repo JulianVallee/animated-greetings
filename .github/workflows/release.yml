@@ -57,18 +57,24 @@ jobs:
           echo "::set-output name=TAG::v$VERSION"
 
       # Used for the release
-      - name: Get changelog
-        uses: actions/github-script@v5
-        id: get_changelog
-        with:
-          script: |
-            return require('./scripts/get-changelog.js')({github, context});
-          result-encoding: string
+#      - name: Get changelog
+#        uses: actions/github-script@v5
+#        id: get_changelog
+#        with:
+#          script: |
+#            return require('./scripts/get-changelog.js')({github, context});
+#          result-encoding: string
 
-      - name: Echo changelog
+      # Used for the release
+      - name: Get changelog #2
+        id: get_changelog
         run: |
-          echo "${{steps.get_changelog.outputs.CHANGELOG}}"
-          echo "${CHANGELOG}"
+          CHANGELOG="$(node ./scripts/get-changelog.js)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          echo "::set-output name=CHANGELOG::${CHANGELOG}"
+      
 
       # Create release
       - name: Create release including build files
@@ -79,4 +85,5 @@ jobs:
           tag: "${{steps.get_version.outputs.TAG}}"
           release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
-          body: "${{ steps.get_changelog.outputs.result}}"
+#          body: "${{ steps.get_changelog.outputs.result}}"
+          body: "${{ steps.get_changelog.outputs.CHANGELOG}}"
