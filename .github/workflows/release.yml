@@ -57,7 +57,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       # Bump version, generate CHANGELOG.md, tag and push new commit
-#      - run: npm run release
+      - run: npm run release
       
 #      - run: npm run release:bump
 #      - run: npm run release:changelog
