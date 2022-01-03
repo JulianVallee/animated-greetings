@@ -19,8 +19,12 @@ jobs:
     steps:
       # Checkout the repository
       - uses: actions/checkout@v2
+        name: Configure committer
         with:
           fetch-depth: 0 # Needed by build_changelog step to get all available tags, not only the latest
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       # Init npm
       - name: Use Node.js ${{ matrix.node-version }}
@@ -29,6 +33,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # Build and run tests
       - run: npm ci
       - run: npm run test:unit
       - run: npm run test:components
@@ -36,8 +41,30 @@ jobs:
       - run: npm run test:e2e
 
 
+        # Install deps and build project
+
+      # Bump version, generate CHANGELOG.md, tag and push new commit
+#      - run: npm run release
+
+
+      # Build Changelog
+#      - name: Build Changelog
+#        id: build_changelog
+#        uses: mikepenz/release-changelog-builder-action@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          configuration: ".github/config/changelog.json"
+
+      - run: npm run release
+#      - run: npm run release:bump
+#      - run: npm run release:changelog
+#      - run: npm run release:tag
+#      - run: npm run release:push
+
+
       # Parse version
-      - name: Parse version from package.json
+      - name: Get version
         id: read_version
         shell: bash
         run: |
@@ -45,19 +72,12 @@ jobs:
           echo "::set-output name=VERSION::$VERSION"
           echo "::set-output name=TAG::v$VERSION"
 
-        # Install deps and build project
-        
-      # Bump version, generate CHANGELOG.md, tag and push new commit
-      - run: npm run release
-
-      # Build Changelog
-      - name: Build Changelog
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get changelog
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
         with:
-          configuration: ".github/config/changelog.json"
+          validation_depth: 0
+          path: ./CHANGELOG.md
 
       # Create release
       - name: Create release including build files
@@ -68,4 +88,5 @@ jobs:
           tag: "${{steps.read_version.outputs.TAG}}"
           release_name: "${{steps.read_version.outputs.TAG}}"
           overwrite: true
-          body: "${{steps.build_changelog.outputs.changelog}}"
+          body: "${{steps.changelog_reader.outputs.changes}}"
+#          body: "${{steps.build_changelog.outputs.changelog}}"
