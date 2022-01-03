@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.25](https://github.com/JulianVallee/animated-greetings/compare/v1.0.24...v1.0.25) (2022-01-03)
+
+
+### Chores
+
+* **build:** get_changelog substep debugging [#2](https://github.com/JulianVallee/animated-greetings/issues/2) ([296783b](https://github.com/JulianVallee/animated-greetings/commits/296783bc00b99949550f8c19a13a98da45771ce2))
+
 ### [1.0.24](https://github.com/JulianVallee/animated-greetings/compare/v1.0.23...v1.0.24) (2022-01-03)
 
 ### [1.0.23](https://github.com/JulianVallee/animated-greetings/compare/v1.0.22...v1.0.23) (2022-01-03)
