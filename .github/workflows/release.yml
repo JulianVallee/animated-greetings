@@ -41,7 +41,7 @@ jobs:
         # Install deps and build project
 
       # Bump version, generate CHANGELOG.md, tag and push new commit
-#      - run: npm run release
+      - run: npm run release
 
 
       # Build Changelog
@@ -53,7 +53,10 @@ jobs:
 #        with:
 #          configuration: ".github/config/changelog.json"
 
-      - run: npm run release
+      - name: Set git username and email
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
 #      - run: npm run release:bump
 #      - run: npm run release:changelog
 #      - run: npm run release:tag
