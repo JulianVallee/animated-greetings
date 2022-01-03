@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.37 (2022-01-03)
+
+
+### 🐛 Bug Fixes
+
+* **build:** fix ts-node invocation for VarParsers ([b4bb1f6](https://github.com/JulianVallee/animated-greetings/commits/b4bb1f6f28286074696b4407daa13b31ebc7d849))
+
+### 1.0.36 (2022-01-03)
+
 ### 1.0.35 (2022-01-03)
 
 ### [1.0.34](https://github.com/JulianVallee/animated-greetings/compare/v1.0.33...v1.0.34) (2022-01-03)
