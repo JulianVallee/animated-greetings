@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.33](https://github.com/JulianVallee/animated-greetings/compare/v1.0.32...v1.0.33) (2022-01-03)
+
+
+### 🐛 Bug Fixes
+
+* **build:** repair changelog parser and enable manual ci invokation ([78d5b3e](https://github.com/JulianVallee/animated-greetings/commits/78d5b3eea04e8c5106c253d85f462e63e955c0d4))
+
 ### [1.0.32](https://github.com/JulianVallee/animated-greetings/compare/v1.0.31...v1.0.32) (2022-01-03)
 
 ### [1.0.31](https://github.com/JulianVallee/animated-greetings/compare/v1.0.30...v1.0.31) (2022-01-03)
