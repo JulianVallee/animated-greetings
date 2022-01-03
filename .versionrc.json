@@ -1,9 +1,9 @@
 {
   "types": [
-    {"type": "feature", "section": "Features"},
-    {"type": "fix", "section": "Bug Fixes"},
-    {"type": "test", "section": "Tests"},
-    {"type": "chore", "section": "Chores"}
+    {"type": "feat", "section": "🎉 Features"},
+    {"type": "fix", "section": "🐛 Bug Fixes"},
+    {"type": "test", "section": "🧪 Tests"},
+    {"type": "chore", "section": "☕ Chores", "hidden": true}
   ],
   "commitUrlFormat": "https://github.com/{{owner}}/{{repository}}/commits/{{hash}}",
   "compareUrlFormat": "https://github.com/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",

@@ -1,7 +1,8 @@
 Animated Greetings
 ======
 
-![example workflow](https://github.com/JulianVallee/animated-greetings/actions/workflows/build.js.yml/badge.svg)
+![example workflow](https://github.com/JulianVallee/animated-greetings/actions/workflows/release.yml/badge.svg)
+![example workflow](https://img.shields.io/github/package-json/v/julianvallee/animated-greetings)
 
 "Animated Greetings" is a WordPress plugin to create beautiful and animated greeting message
 that can be shared via various social media sites and messengers.

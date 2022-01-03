@@ -25,6 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # Used for the version bump/changelog commit
       - name: Set git username and email
         run: |
           git config user.name 'github-actions[bot]'
@@ -37,16 +38,9 @@ jobs:
       - run: npm run build --if-present
       - run: npm run test:e2e
 
-      # Build Changelog
-#      - name: Build Changelog
-#        id: build_changelog
-#        uses: mikepenz/release-changelog-builder-action@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          configuration: ".github/config/changelog.json"
+      - run: npm run documentation:vue
 
-      # Bump version, generate CHANGELOG.md, tag and push new commit
+      # Bumps version, generates CHANGELOG.md, commits the changes and pushes them with a new tag
       - run: npm run release
 
       # Used for the release
@@ -56,26 +50,7 @@ jobs:
           VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
           echo "::set-output name=TAG::v$VERSION"
 
-      # Used for the release
-#      - name: Get changelog
-#        uses: actions/github-script@v5
-#        id: get_changelog
-#        with:
-#          script: |
-#            return require('./scripts/get-changelog.js')({github, context});
-#          result-encoding: string
-
-      # Used for the release
-#      - name: Get changelog #2
-#        id: get_changelog
-#        run: |
-#          CHANGELOG="$(node ./scripts/get-changelog.js)"
-#          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-#          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-#          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-#          echo "::set-output name=CHANGELOG::${CHANGELOG}"
-
-      - name: Get changelog #2
+      - name: Get changelog
         id: get_changelog
         run: node ./scripts/ci/standard-version/updater/changelog-parser.js
 
@@ -88,5 +63,4 @@ jobs:
           tag: "${{steps.get_version.outputs.TAG}}"
           release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
-#          body: "${{ steps.get_changelog.outputs.result}}"
           body: "${{ steps.get_changelog.outputs.release}}"

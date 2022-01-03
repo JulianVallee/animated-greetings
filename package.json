@@ -6,11 +6,12 @@
   "scripts": {
     "start": "ts-node scripts/start-dev.ts",
     "build": "webpack --mode production",
-    "release": "standard-version && git push --follow-tags origin master",
+    "release": "git add ./website && standard-version && git push --follow-tags origin master",
     "test": "run-s test:*",
     "test:unit": "jest --silent=false --passWithNoTests ./test/unit",
     "test:components": "jest --silent=false --passWithNoTests ./test/components",
     "test:e2e": "jest --silent=false --passWithNoTests ./test/e2e",
+    "documentation:vue": "vuese gen",
     "postinstall": "curl -s -L https://wordpress.org/latest.tar.gz | tar -xz -C node_modules",
     "prepare": "husky install"
   },
@@ -46,6 +47,7 @@
     "@types/semver": "^7.3.9",
     "@types/webpack-env": "^1.16.3",
     "@vue/test-utils": "^1.3.0",
+    "@vuese/cli": "^2.14.3",
     "autoprefixer": "^10.4.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^27.4.5",
