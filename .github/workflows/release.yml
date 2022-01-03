@@ -52,7 +52,7 @@ jobs:
 
       - name: Get changelog
         id: get_changelog
-        run: node ./scripts/ci/standard-version/changelog-parser.js
+        run: node ./scripts/ci/changelog-parser.js
 
       # Create release
       - name: Create release including build files
