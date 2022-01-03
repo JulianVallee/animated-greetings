@@ -43,9 +43,21 @@ class ChangelogParser {
                     };
 
                     this.outputs.body = this.outputs.body ?? '* no changes'
-                    this.outputs.release = `## What's Changed\n\n${this.outputs.body}\n\n**Full Changelog**: ${this.outputs.link}`;
+                    this.outputs.release = `## What's Changed\n\n${this.outputs.body}`;
+
+                } else {
+                    core.setFailed(`Action failed: failed to split the changelog header`);
+
                 }
+
+            } else {
+                core.setFailed(`Action failed: failed to split the changelog entry`);
+
             }
+
+        } else {
+            core.setFailed(`Action failed: failed to find the changelog entry`);
+
         }
 
         for(let key in this.outputs) {
