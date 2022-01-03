@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.26](https://github.com/JulianVallee/animated-greetings/compare/v1.0.25...v1.0.26) (2022-01-03)
+
+
+### Chores
+
+* **build:** fix truncated node script output in release action ([fe1b249](https://github.com/JulianVallee/animated-greetings/commits/fe1b24968fa149ca1894b8fe41e144bcd022ab77))
+
 ### [1.0.25](https://github.com/JulianVallee/animated-greetings/compare/v1.0.24...v1.0.25) (2022-01-03)
 
 
