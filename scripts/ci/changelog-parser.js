@@ -73,7 +73,7 @@ class ChangelogParser {
         // core.setOutput('link', this.outputs.link);
         // core.setOutput('date', this.outputs.date);
         // core.setOutput('body', this.outputs.body);
-        core.setOutput('release', this.outputs.release);
+        core.setOutput('release', this.output);
     }
 }
 
