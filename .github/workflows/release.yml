@@ -31,11 +31,11 @@ jobs:
           cache: 'npm'
 
       # Build and run tests
-      - run: npm ci
-      - run: npm run test:unit
-      - run: npm run test:components
-      - run: npm run build --if-present
-      - run: npm run test:e2e
+#      - run: npm ci
+#      - run: npm run test:unit
+#      - run: npm run test:components
+#      - run: npm run build --if-present
+#      - run: npm run test:e2e
 
 
         # Install deps and build project
@@ -57,7 +57,8 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       # Bump version, generate CHANGELOG.md, tag and push new commit
-      - run: npm run release
+#      - run: npm run release
+      -
 #      - run: npm run release:bump
 #      - run: npm run release:changelog
 #      - run: npm run release:tag
@@ -85,7 +86,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
-          file: ./dist/animated-greetings.zip
+#          file: ./dist/animated-greetings.zip
           tag: "${{steps.read_version.outputs.TAG}}"
           release_name: "${{steps.read_version.outputs.TAG}}"
           overwrite: true
