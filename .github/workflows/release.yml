@@ -66,15 +66,18 @@ jobs:
 #          result-encoding: string
 
       # Used for the release
+#      - name: Get changelog #2
+#        id: get_changelog
+#        run: |
+#          CHANGELOG="$(node ./scripts/get-changelog.js)"
+#          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+#          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+#          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+#          echo "::set-output name=CHANGELOG::${CHANGELOG}"
+
       - name: Get changelog #2
         id: get_changelog
-        run: |
-          CHANGELOG="$(node ./scripts/get-changelog.js)"
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-          echo "::set-output name=CHANGELOG::${CHANGELOG}"
-      
+        run: node ./scripts/get-changelog.js
 
       # Create release
       - name: Create release including build files
@@ -86,4 +89,4 @@ jobs:
           release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
 #          body: "${{ steps.get_changelog.outputs.result}}"
-          body: "${{ steps.get_changelog.outputs.CHANGELOG}}"
+          body: "${{ steps.get_changelog.outputs.body}}"
