@@ -89,4 +89,4 @@ jobs:
           release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
 #          body: "${{ steps.get_changelog.outputs.result}}"
-          body: "${{ steps.get_changelog.outputs.body}}"
+          body: "${{ steps.get_changelog.outputs.release}}"
