@@ -13,13 +13,13 @@ jobs:
 
     steps:
       # Checkout the repository
-      - uses: actions/checkout@v2
-        name: Configure committer
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Needed by build_changelog step to get all available tags, not only the latest
 
       # Init npm
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
