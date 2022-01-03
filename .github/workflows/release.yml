@@ -2,11 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
-    inputs:
-      testinput:
-        description: 'A test input'
-        required: true
-        default: 'default value'
+#    inputs:
+#      testinput:
+#        description: 'A test input'
+#        required: true
+#        default: 'default value'
 
 jobs:
   release:
@@ -22,9 +22,6 @@ jobs:
         name: Configure committer
         with:
           fetch-depth: 0 # Needed by build_changelog step to get all available tags, not only the latest
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       # Init npm
       - name: Use Node.js ${{ matrix.node-version }}
