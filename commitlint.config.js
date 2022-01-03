@@ -19,7 +19,7 @@ module.exports = {
             2,
             'always',
             [
-                'feature',
+                'feat',
                 'fix',
                 'test',
                 'chore'
