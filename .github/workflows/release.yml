@@ -2,11 +2,6 @@ name: Release
 
 on:
   workflow_dispatch:
-#    inputs:
-#      testinput:
-#        description: 'A test input'
-#        required: true
-#        default: 'default value'
 
 jobs:
   release:
@@ -30,17 +25,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Set git username and email
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
       # Build and run tests
       - run: npm ci
-#      - run: npm run test:unit
-#      - run: npm run test:components
-#      - run: npm run build --if-present
-#      - run: npm run test:e2e
-
-
-        # Install deps and build project
-
-
+      - run: npm run test:unit
+      - run: npm run test:components
+      - run: npm run build --if-present
+      - run: npm run test:e2e
 
       # Build Changelog
 #      - name: Build Changelog
@@ -51,31 +46,19 @@ jobs:
 #        with:
 #          configuration: ".github/config/changelog.json"
 
-      - name: Set git username and email
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-
       # Bump version, generate CHANGELOG.md, tag and push new commit
       - run: npm run release
-      
-#      - run: npm run release:bump
-#      - run: npm run release:changelog
-#      - run: npm run release:tag
-#      - run: npm run release:push
 
-
-      # Parse version
+      # Used for the release
       - name: Get version
         id: get_version
-        shell: bash
         run: |
           VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
           echo "::set-output name=TAG::v$VERSION"
 
+      # Used for the release
       - name: Get changelog
         id: get_changelog
-        shell: bash
         run: |
           CHANGELOG=$(npm run release:get-changelog)
           echo "::set-output name=CHANGELOG::$CHANGELOG"
@@ -85,9 +68,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
-#          file: ./dist/animated-greetings.zip
+          file: ./dist/animated-greetings.zip
           tag: "${{steps.get_version.outputs.TAG}}"
           release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
           body: "${{steps.get_changelog.outputs.CHANGELOG}}"
-#          body: "${{steps.build_changelog.outputs.changelog}}"
