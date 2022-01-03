@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.21](https://github.com/JulianVallee/animated-greetings/compare/v1.0.20...v1.0.21) (2022-01-03)
+
+
+### Chores
+
+* **build:** enable printing type "chores" in the changelog ([73c2284](https://github.com/JulianVallee/animated-greetings/commits/73c22849c1787cd9a49232b6fa8b04a8a610b2d1))
+* **build:** refactor the release workflow ([6b480ec](https://github.com/JulianVallee/animated-greetings/commits/6b480ecf395c900a0d6933bda0a1dd4d47aeb413))
+
 ### [1.0.20](https://github.com/JulianVallee/animated-greetings/compare/v1.0.19...v1.0.20) (2022-01-03)
 
 ### [1.0.19](https://github.com/JulianVallee/animated-greetings/compare/v1.0.18...v1.0.19) (2022-01-03)
