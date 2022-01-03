@@ -29,16 +29,16 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run test
-      - run: npm run docgen:vue
+      - run: npm run docgen
       - run: npm run release
 
       - name: Get version
         id: get_version
-        run: ts-node ./scripts/ci/get-version.ts
+        run: npx ts-node ./scripts/ci/get-version.ts
 
       - name: Get changelog
         id: get_changelog
-        run: ts-node ./scripts/ci/get-changelog.ts
+        run: npx ts-node ./scripts/ci/get-changelog.ts
 
       # Create release
       - name: Create release including build files
