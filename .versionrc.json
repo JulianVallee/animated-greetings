@@ -3,7 +3,7 @@
     {"type": "feature", "section": "Features"},
     {"type": "fix", "section": "Bug Fixes"},
     {"type": "test", "section": "Tests"},
-    {"type": "chore", "hidden": "Chores"}
+    {"type": "chore", "section": "Chores"}
   ],
   "commitUrlFormat": "https://github.com/{{owner}}/{{repository}}/commits/{{hash}}",
   "compareUrlFormat": "https://github.com/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}",
