@@ -67,19 +67,18 @@ jobs:
 
       # Parse version
       - name: Get version
-        id: read_version
+        id: get_version
         shell: bash
         run: |
           VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
-          echo "::set-output name=VERSION::$VERSION"
           echo "::set-output name=TAG::v$VERSION"
 
       - name: Get changelog
-        id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          validation_depth: 0
-          path: ./CHANGELOG.md
+        id: get_changelog
+        shell: bash
+        run: |
+          CHANGELOG=$(npm run release:get-changelog)
+          echo "::set-output name=CHANGELOG::$CHANGELOG"
 
       # Create release
       - name: Create release including build files
@@ -87,8 +86,8 @@ jobs:
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
 #          file: ./dist/animated-greetings.zip
-          tag: "${{steps.read_version.outputs.TAG}}"
-          release_name: "${{steps.read_version.outputs.TAG}}"
+          tag: "${{steps.get_version.outputs.TAG}}"
+          release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
-          body: "${{steps.changelog_reader.outputs.changes}}"
+          body: "${{steps.get_changelog.outputs.CHANGELOG}}"
 #          body: "${{steps.build_changelog.outputs.changelog}}"

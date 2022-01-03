@@ -7,7 +7,7 @@
     "start": "ts-node scripts/start-dev.ts",
     "build": "webpack --mode production",
     "release": "standard-version && git push --follow-tags origin master",
-    "release:get-changelog": "standard-version && git push --follow-tags origin master",
+    "release:get-changelog": "ts-node ./scripts/get-changelog.js",
     "test": "run-s test:*",
     "test:unit": "jest --silent=false --passWithNoTests ./test/unit",
     "test:components": "jest --silent=false --passWithNoTests ./test/components",
