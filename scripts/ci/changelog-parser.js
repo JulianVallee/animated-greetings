@@ -3,7 +3,7 @@ const core = require('@actions/core');
 
 class ChangelogParser {
     constructor() {
-        this.outputs = null;
+        this.output = '* no changes';
 
         this.readChangelog();
         this.parseChangelog();
@@ -35,43 +35,44 @@ class ChangelogParser {
                 const matchesHeaderSplit = regExp3.exec(matchesSplit[1]);
 
                 if(matchesHeaderSplit && matchesHeaderSplit.length >= 3) {
-                    this.outputs = {
-                        version: matchesHeaderSplit[1].trim(),
-                        link: matchesHeaderSplit[2].trim(),
-                        date: matchesHeaderSplit[3].trim(),
-                        body: matchesSplit[2].trim()
-                    };
+                    // this.outputs = {
+                    //     version: matchesHeaderSplit[1].trim(),
+                    //     link: matchesHeaderSplit[2].trim(),
+                    //     date: matchesHeaderSplit[3].trim(),
+                    //     body: matchesSplit[2].trim()
+                    // };
+                    //
+                    // this.outputs.body = this.outputs.body ?? '* no changes'
 
-                    this.outputs.body = this.outputs.body ?? '* no changes'
-                    this.outputs.release = `## What's Changed\n\n${this.outputs.body}`;
+                    this.output = `## What's Changed\n\n${matchesSplit[2].trim()}`;
 
                 } else {
-                    core.setFailed(`Action failed: failed to split the changelog header`);
+                    // core.setFailed(`Action failed: failed to split the changelog header`);
 
                 }
 
             } else {
-                core.setFailed(`Action failed: failed to split the changelog entry`);
+                // core.setFailed(`Action failed: failed to split the changelog entry`);
 
             }
 
         } else {
-            core.setFailed(`Action failed: failed to find the changelog entry`);
+            // core.setFailed(`Action failed: failed to find the changelog entry`);
 
         }
 
-        for(let key in this.outputs) {
-            if(!this.outputs[key]) {
-                core.setFailed(`Action failed: output ${key} was empty`);
-            }
-        }
+        // for(let key in this.outputs) {
+        //     if(!this.outputs[key]) {
+        //         core.setFailed(`Action failed: output ${key} was empty`);
+        //     }
+        // }
     };
 
     setOutputs() {
-        core.setOutput('version', this.outputs.version);
-        core.setOutput('link', this.outputs.link);
-        core.setOutput('date', this.outputs.date);
-        core.setOutput('body', this.outputs.body);
+        // core.setOutput('version', this.outputs.version);
+        // core.setOutput('link', this.outputs.link);
+        // core.setOutput('date', this.outputs.date);
+        // core.setOutput('body', this.outputs.body);
         core.setOutput('release', this.outputs.release);
     }
 }
