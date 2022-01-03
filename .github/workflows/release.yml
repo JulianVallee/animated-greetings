@@ -58,11 +58,13 @@ jobs:
 
       # Used for the release
       - name: Get changelog
+        uses: actions/github-script@v5
         id: get_changelog
-        run: |
-          CHANGELOG="$(node ./scripts/get-changelog.js)"
-          echo "::set-output name=CHANGELOG::${CHANGELOG}"
-          
+        with:
+          script: |
+            return require('./scripts/get-changelog.js')({github, context});
+          result-encoding: string
+
       - name: Echo changelog
         run: |
           echo "${{steps.get_changelog.outputs.CHANGELOG}}"
@@ -77,4 +79,4 @@ jobs:
           tag: "${{steps.get_version.outputs.TAG}}"
           release_name: "${{steps.get_version.outputs.TAG}}"
           overwrite: true
-          body: "${{steps.get_changelog.outputs.CHANGELOG}}"
+          body: "${{ steps.get_changelog.outputs.result}}"
