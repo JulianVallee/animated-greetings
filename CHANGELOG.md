@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2022-01-03)
+
+
+### 🎉 Features
+
+* **somescope2:** some test feat that is not really a feat ([f4e390e](https://github.com/JulianVallee/animated-greetings/commits/f4e390ec498fb19963f982a975b4134abfe8f75e))
+
 ### 1.0.37 (2022-01-03)
 
 
