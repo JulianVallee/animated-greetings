@@ -24,7 +24,7 @@
     },
     {
       "filename": "./src/animated-greetings.php",
-      "updater": "./scripts/bump-plugin-version.js"
+      "updater": "./scripts/ci/standard-version/updater/wordpress-plugin.js"
     }
   ]
 }

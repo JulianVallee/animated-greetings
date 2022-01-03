@@ -77,7 +77,7 @@ jobs:
 
       - name: Get changelog #2
         id: get_changelog
-        run: node ./scripts/get-changelog.js
+        run: node ./scripts/ci/standard-version/updater/changelog-parser.js
 
       # Create release
       - name: Create release including build files
