@@ -7,22 +7,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Needed by build_changelog step to get all available tags, not only the latest
 
       # Init npm
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js 16.x
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16.x
           cache: 'npm'
 
       # Used for the version bump/changelog commit
@@ -33,26 +27,18 @@ jobs:
 
       # Build and run tests
       - run: npm ci
-      - run: npm run test:unit
-      - run: npm run test:components
-      - run: npm run build --if-present
-      - run: npm run test:e2e
-
-
-      # Bumps version, generates CHANGELOG.md, commits the changes and pushes them with a new tag
+      - run: npm run build
+      - run: npm run test
       - run: npm run docgen:vue
       - run: npm run release
 
-      # Used for the release
       - name: Get version
         id: get_version
-        run: |
-          VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
-          echo "::set-output name=TAG::v$VERSION"
+        run: ts-node ./scripts/ci/get-version.ts
 
       - name: Get changelog
         id: get_changelog
-        run: node ./scripts/ci/changelog-parser.js
+        run: ts-node ./scripts/ci/get-changelog.ts
 
       # Create release
       - name: Create release including build files
@@ -60,7 +46,7 @@ jobs:
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           file: ./dist/animated-greetings.zip
-          tag: "${{steps.get_version.outputs.TAG}}"
-          release_name: "${{steps.get_version.outputs.TAG}}"
+          tag: "${{steps.get_version.outputs.tag}}"
+          release_name: "${{steps.get_version.outputs.tag}}"
           overwrite: true
-          body: "${{ steps.get_changelog.outputs.release}}"
+          body: "${{ steps.get_changelog.outputs.body}}"
