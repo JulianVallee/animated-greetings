@@ -1,17 +1,14 @@
-Animated Greetings
-======
-
+#Animated Greetings
 [![Release](https://github.com/JulianVallee/animated-greetings/actions/workflows/release.yml/badge.svg)](https://github.com/JulianVallee/animated-greetings/actions/workflows/release.yml)
 ![Version](https://img.shields.io/github/package-json/v/julianvallee/animated-greetings)
 
 "Animated Greetings" is a WordPress plugin to create beautiful and animated greeting message
 that can be shared via various social media sites and messengers.
 
-Official git repository: https://github.com/JulianVallee/animated-greetings
+- Repository: https://github.com/JulianVallee/animated-greetings
+- Demo: https://www.improved-reading.de/christmas2021
 
-Features
-========
-
+## Features
 - Write your own greeting messages (supports text + unicode smileys)
 - Set animation and styles per line of text
 - Set an animation background effect
@@ -21,51 +18,30 @@ Features
 
 ![Editor](./screenshots/editor.png "Editor")
 
-Instructions
-============
 
-Lorem Ipsum dolor sit amet.
-
-
+## Instructions
+### Shortcode for editor
 ```
-[animated-greetings]
+[animated-greetings 
+    editor="true"
+]
+```
+
+### Shortcode for player
+```
+[animated-greetings 
+    player="true"
+]
 ```
 
 
-News
-===
-
-### 2021-12-31
-
-New Years Update!
-
-- Improve player performance on low-end devices
-
-### 2021-12-12
-
-Initial release
+## Documentation
+- [User Documentation](https://github.com/JulianVallee/animated-greetings/blob/master/README.md)
+- [Developer Documentation](https://github.com/JulianVallee/animated-greetings/blob/master/README.md)
 
 
-Compatibility Status
-========
-| Platform | Status         |
-|----------| -------------- |
-| Chrome   |  |
-| Edge     |  |
-| Firefox  |  |
-| IE11     |  |
-| Safari   |  |
+## Changelog
+You can read the full changelog [here](https://github.com/JulianVallee/animated-greetings/blob/master/CHANGELOG.md).
 
-
-Documentation
-========
-| Type                    | Link |
-|-------------------------|------|
-| User Documentation      |      |
-| Developer Documentation |      |
-
-
-Todo
-========
-- [ ] Separate Animated Greetings into JS library and WordPress Plugin
-- [ ] Improve documentation
+## License
+You can read the full changelog [here](https://github.com/JulianVallee/animated-greetings/blob/master/CHANGELOG.md).
